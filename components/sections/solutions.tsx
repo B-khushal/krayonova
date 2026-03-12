@@ -11,7 +11,9 @@ import {
     PackageCheck,
     Layers 
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { InteractiveCardGrid } from "@/components/ui/interactive-card-grid";
 
 const solutions = [
     {
@@ -19,56 +21,64 @@ const solutions = [
         description: "Powerful control panels for managing your business operations",
         icon: LayoutDashboard,
         color: "text-purple-600 dark:text-purple-400",
-        bgColor: "bg-purple-100 dark:bg-purple-900/20"
+        bgColor: "bg-purple-100 dark:bg-purple-900/20",
+        highlights: ["Reporting", "Permissions", "Workflow control"]
     },
     {
         title: "POS Billing Systems",
         description: "Point-of-sale solutions for retail and restaurant businesses",
         icon: ShoppingCart,
         color: "text-blue-600 dark:text-blue-400",
-        bgColor: "bg-blue-100 dark:bg-blue-900/20"
+        bgColor: "bg-blue-100 dark:bg-blue-900/20",
+        highlights: ["Billing", "Receipts", "Realtime inventory"]
     },
     {
         title: "School Management",
         description: "Complete educational institution management platforms",
         icon: GraduationCap,
         color: "text-green-600 dark:text-green-400",
-        bgColor: "bg-green-100 dark:bg-green-900/20"
+        bgColor: "bg-green-100 dark:bg-green-900/20",
+        highlights: ["Attendance", "Fees", "Academic records"]
     },
     {
         title: "Business CRMs",
         description: "Customer relationship management for growing teams",
         icon: Users,
         color: "text-orange-600 dark:text-orange-400",
-        bgColor: "bg-orange-100 dark:bg-orange-900/20"
+        bgColor: "bg-orange-100 dark:bg-orange-900/20",
+        highlights: ["Pipelines", "Lead tracking", "Automation"]
     },
     {
         title: "Analytics Dashboards",
         description: "Data visualization and business intelligence tools",
         icon: BarChart3,
         color: "text-pink-600 dark:text-pink-400",
-        bgColor: "bg-pink-100 dark:bg-pink-900/20"
+        bgColor: "bg-pink-100 dark:bg-pink-900/20",
+        highlights: ["KPIs", "Insights", "Custom reports"]
     },
     {
         title: "Mobile Applications",
         description: "Native and cross-platform mobile app development",
         icon: Smartphone,
         color: "text-cyan-600 dark:text-cyan-400",
-        bgColor: "bg-cyan-100 dark:bg-cyan-900/20"
+        bgColor: "bg-cyan-100 dark:bg-cyan-900/20",
+        highlights: ["iOS", "Android", "Offline-ready UX"]
     },
     {
         title: "Inventory Systems",
         description: "Real-time inventory tracking and warehouse management",
         icon: PackageCheck,
         color: "text-yellow-600 dark:text-yellow-400",
-        bgColor: "bg-yellow-100 dark:bg-yellow-900/20"
+        bgColor: "bg-yellow-100 dark:bg-yellow-900/20",
+        highlights: ["Stock alerts", "Warehousing", "Order sync"]
     },
     {
         title: "SaaS Platforms",
         description: "Scalable software-as-a-service solutions for any industry",
         icon: Layers,
         color: "text-indigo-600 dark:text-indigo-400",
-        bgColor: "bg-indigo-100 dark:bg-indigo-900/20"
+        bgColor: "bg-indigo-100 dark:bg-indigo-900/20",
+        highlights: ["Subscriptions", "Tenant isolation", "Scalable APIs"]
     },
 ];
 
@@ -92,33 +102,48 @@ export function SolutionsSection() {
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {solutions.map((solution, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.05 }}
-                            whileHover={{ y: -8, scale: 1.05 }}
-                            className="h-full"
-                        >
-                            <Card className="h-full border-border/50 bg-background backdrop-blur-sm transition-all hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20">
-                                <CardHeader>
-                                    <div className={`h-14 w-14 rounded-xl ${solution.bgColor} flex items-center justify-center mb-4 ${solution.color}`}>
-                                        <solution.icon className="h-7 w-7" />
-                                    </div>
-                                    <CardTitle className="text-lg">{solution.title}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm text-muted-foreground">
-                                        {solution.description}
-                                    </p>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </div>
+                <InteractiveCardGrid
+                    items={solutions}
+                    getItemKey={(solution) => solution.title}
+                    getTitle={(solution) => solution.title}
+                    gridClassName="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+                    cardClassName="min-h-[20rem]"
+                    renderVisual={(solution, isActive) => (
+                        <div className="px-6 pt-6">
+                            <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${solution.bgColor} ${solution.color} transition-transform duration-500 ${isActive ? "scale-110" : "scale-100"}`}>
+                                <solution.icon className="h-8 w-8" />
+                            </div>
+                        </div>
+                    )}
+                    renderEyebrow={() => (
+                        <p className="text-sm font-medium uppercase tracking-[0.22em] text-primary/70">
+                            Tailored systems
+                        </p>
+                    )}
+                    renderDetails={(solution) => (
+                        <div className="space-y-4">
+                            <p className="text-sm leading-6 text-muted-foreground">
+                                {solution.description}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2">
+                                {solution.highlights.map((highlight) => (
+                                    <Badge
+                                        key={highlight}
+                                        variant="secondary"
+                                        className="border-primary/10 bg-primary/8 text-primary"
+                                    >
+                                        {highlight}
+                                    </Badge>
+                                ))}
+                            </div>
+
+                            <Button asChild size="sm" variant="outline" className="rounded-full border-primary/20 bg-background/60 px-4">
+                                <a href="#contact">Plan This Solution</a>
+                            </Button>
+                        </div>
+                    )}
+                />
             </div>
         </section>
     );

@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { InteractiveCardGrid } from "@/components/ui/interactive-card-grid";
 
 const projects = [
     {
@@ -165,54 +166,66 @@ export function PortfolioSection() {
                 </motion.div>
 
                 {/* Portfolio Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredProjects.map((project, index) => (
-                        <motion.div
-                            key={`${project.title}-${index}`}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.05 }}
-                            whileHover={{ y: -8, scale: 1.02 }}
-                            className="group cursor-pointer"
-                        >
-                            <Card className="overflow-hidden border-border/50 bg-background shadow-sm transition-all hover:shadow-2xl hover:shadow-primary/10 h-full flex flex-col">
-                                <div className="relative aspect-video overflow-hidden">
-                                    <img
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    <div className="absolute top-4 right-4">
-                                        <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
-                                            {project.category}
-                                        </Badge>
-                                    </div>
-                                </div>
-                                <CardContent className="p-6 flex-grow">
-                                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-muted-foreground text-sm">
-                                        {project.description}
-                                    </p>
-                                </CardContent>
-                                <CardFooter className="px-6 pb-6 pt-0 flex flex-wrap gap-2">
-                                    {project.tech.map((t) => (
-                                        <Badge 
-                                            key={t} 
-                                            variant="secondary" 
-                                            className="bg-primary/5 text-primary hover:bg-primary/10 text-xs"
-                                        >
-                                            {t}
-                                        </Badge>
-                                    ))}
-                                </CardFooter>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </div>
+                <InteractiveCardGrid
+                    key={selectedCategory}
+                    items={filteredProjects}
+                    getItemKey={(project, index) => `${project.title}-${index}`}
+                    getTitle={(project) => project.title}
+                    gridClassName="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                    cardClassName="min-h-[26rem]"
+                    renderVisual={(project, isActive) => (
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                            <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                className={`object-cover transition-transform duration-500 ${
+                                    isActive ? "scale-110" : "scale-100"
+                                }`}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                            <div className="absolute right-4 top-4">
+                                <Badge variant="secondary" className="border-white/20 bg-background/80 backdrop-blur-md">
+                                    {project.category}
+                                </Badge>
+                            </div>
+                        </div>
+                    )}
+                    renderEyebrow={(project) => (
+                        <p className="text-sm font-medium uppercase tracking-[0.22em] text-primary/70">
+                            {project.category}
+                        </p>
+                    )}
+                    renderDetails={(project) => (
+                        <div className="space-y-4">
+                            <p className="text-sm leading-6 text-muted-foreground">
+                                {project.description}
+                            </p>
+
+                            <div className="flex flex-wrap gap-2">
+                                {project.tech.map((tech) => (
+                                    <Badge
+                                        key={tech}
+                                        variant="secondary"
+                                        className="border-primary/10 bg-primary/8 text-primary"
+                                    >
+                                        {tech}
+                                    </Badge>
+                                ))}
+                            </div>
+
+                            <div className="flex flex-wrap gap-3">
+                                <Button asChild size="sm" className="rounded-full px-4">
+                                    <a href="#contact">Build Something Similar</a>
+                                </Button>
+                                <Button asChild size="sm" variant="outline" className="rounded-full border-primary/20 bg-background/60 px-4">
+                                    <a href="#services">View Capabilities</a>
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                />
             </div>
         </section>
     );
