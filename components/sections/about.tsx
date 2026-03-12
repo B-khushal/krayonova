@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 
 const team = [
-    { name: "John Doe", role: "Founder & CEO" },
-    { name: "Jane Smith", role: "Head of Design" },
-    { name: "Alex Johnson", role: "Lead Engineer" }
+    { name: "Badodhe Khushal Prasad", role: "Founder & CEO" }
 ];
 
 export function AboutSection() {
@@ -30,7 +28,7 @@ export function AboutSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full mt-12"
+                        className="grid grid-cols-1 sm:grid-cols-1 gap-8 w-full mt-12"
                     >
                         {team.map((member, i) => (
                             <div key={i} className="flex flex-col items-center">
