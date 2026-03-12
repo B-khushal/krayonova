@@ -13,15 +13,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  
-  // Output for deployment
-  output: 'standalone',
-  
-  // Suppress hydration warnings in production
-  onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
-  },
 };
 
 export default nextConfig;
