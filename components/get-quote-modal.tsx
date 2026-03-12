@@ -93,7 +93,7 @@ export function GetQuoteModal({ trigger, open, onOpenChange }: GetQuoteModalProp
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-purple-200 dark:bg-background">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Get a Project Quote</DialogTitle>
           <DialogDescription>

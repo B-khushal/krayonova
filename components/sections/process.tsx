@@ -13,7 +13,7 @@ const steps = [
 
 export function ProcessSection() {
     return (
-        <section id="process" className="relative z-20 py-24 bg-background">
+        <section id="process" className="relative z-20 py-24 bg-purple-200 dark:bg-background">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div

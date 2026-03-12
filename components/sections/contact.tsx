@@ -77,7 +77,7 @@ export function ContactSection() {
     };
 
     return (
-        <section id="contact" className="relative z-20 py-24 bg-background">
+        <section id="contact" className="relative z-20 py-24 bg-purple-200 dark:bg-background">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div
@@ -161,7 +161,7 @@ export function ContactSection() {
                                 <div className="mb-4 text-6xl">✓</div>
                                 <h3 className="text-2xl font-bold mb-2 text-primary">Quote Request Submitted!</h3>
                                 <p className="text-muted-foreground">
-                                    We'll review your project details and get back to you within 24 hours.
+                                    We&apos;ll review your project details and get back to you within 24 hours.
                                 </p>
                             </div>
                         ) : (

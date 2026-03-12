@@ -11,7 +11,7 @@ export function Footer() {
 
     return (
         <>
-            <footer className="border-t py-12 bg-gradient-to-br from-primary/10 via-background to-primary/5">
+            <footer className="border-t border-border/40 py-12 bg-gradient-to-br from-primary/10 via-background to-primary/5">
                 <div className="container mx-auto px-4 md:px-8 max-w-screen-2xl">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div className="md:col-span-2">
@@ -26,27 +26,27 @@ export function Footer() {
                                 Get a Quote
                             </Button>
                             <div className="flex space-x-4 text-muted-foreground">
-                                <Link href="#" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Twitter className="h-5 w-5" /></Link>
-                                <Link href="#" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Github className="h-5 w-5" /></Link>
-                                <Link href="#" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Linkedin className="h-5 w-5" /></Link>
+                                <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Twitter className="h-5 w-5" /></Link>
+                                <Link href="https://github.com/B-khushal" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Github className="h-5 w-5" /></Link>
+                                <Link href="https://www.linkedin.com/in/badodhe-khushal-prasad-b00b51284" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Linkedin className="h-5 w-5" /></Link>
                             </div>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-4 text-foreground">Navigation</h3>
                             <ul className="space-y-2 text-muted-foreground text-sm">
-                                <li><Link href="#home" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Home</Link></li>
-                                <li><Link href="#services" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Services</Link></li>
-                                <li><Link href="#portfolio" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Portfolio</Link></li>
-                                <li><Link href="#hosting" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Hosting</Link></li>
+                                <li><Link href="#home" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Home</Link></li>
+                                <li><Link href="#services" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Services</Link></li>
+                                <li><Link href="#portfolio" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Portfolio</Link></li>
+                                <li><Link href="#hosting" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Hosting</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-4 text-foreground">Company</h3>
                             <ul className="space-y-2 text-muted-foreground text-sm">
-                                <li><Link href="#about" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">About Us</Link></li>
-                                <li><Link href="#contact" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Contact</Link></li>
-                                <li><Link href="#" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Privacy Policy</Link></li>
-                                <li><Link href="#" className="hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Terms of Service</Link></li>
+                                <li><Link href="#about" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">About Us</Link></li>
+                                <li><Link href="#contact" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Contact</Link></li>
+                                <li><Link href="#" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Privacy Policy</Link></li>
+                                <li><Link href="#" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors">Terms of Service</Link></li>
                             </ul>
                         </div>
                     </div>

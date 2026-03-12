@@ -125,7 +125,7 @@ export function PortfolioSection() {
         : projects.filter(project => project.category === selectedCategory);
 
     return (
-        <section id="portfolio" className="relative z-20 py-24 bg-background">
+        <section id="portfolio" className="relative z-20 py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div
@@ -172,9 +172,9 @@ export function PortfolioSection() {
                     getItemKey={(project, index) => `${project.title}-${index}`}
                     getTitle={(project) => project.title}
                     gridClassName="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                    cardClassName="min-h-[26rem]"
+                    cardClassName="min-h-[31rem]"
                     renderVisual={(project, isActive) => (
-                        <div className="relative aspect-[4/3] overflow-hidden">
+                        <div className="relative h-52 overflow-hidden md:h-56">
                             <Image
                                 src={project.image}
                                 alt={project.title}

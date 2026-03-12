@@ -14,7 +14,7 @@ const features = [
 
 export function HostingSection() {
     return (
-        <section id="hosting" className="relative z-20 py-24 bg-gray-50 dark:bg-gray-900 border-t border-b border-border/40">
+        <section id="hosting" className="relative z-20 py-24 bg-purple-200 dark:bg-purple-600 border-t border-b border-border/40">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <motion.div
@@ -27,7 +27,7 @@ export function HostingSection() {
                             Lightning Fast Cloud Hosting
                         </h2>
                         <p className="text-lg text-muted-foreground mb-8 text-balance">
-                            Deploy your applications on KrayoNova's premium cloud infrastructure. We provide secure, scalable, and ultra-fast hosting environments optimized for modern web applications. Focus on your business while we manage the servers.
+                            Deploy your applications on KrayoNova&apos;s premium cloud infrastructure. We provide secure, scalable, and ultra-fast hosting environments optimized for modern web applications. Focus on your business while we manage the servers.
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

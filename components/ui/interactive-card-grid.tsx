@@ -45,6 +45,7 @@ export function InteractiveCardGrid<T>({
 }: InteractiveCardGridProps<T>) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [supportsHover, setSupportsHover] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
   const [cardSides, setCardSides] = useState<Record<number, CardSide>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -94,12 +95,19 @@ export function InteractiveCardGrid<T>({
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
     const updateSupport = () => setSupportsHover(mediaQuery.matches);
+    const updateMobileView = () => setIsMobileView(mobileQuery.matches);
 
     updateSupport();
+    updateMobileView();
     mediaQuery.addEventListener("change", updateSupport);
+    mobileQuery.addEventListener("change", updateMobileView);
 
-    return () => mediaQuery.removeEventListener("change", updateSupport);
+    return () => {
+      mediaQuery.removeEventListener("change", updateSupport);
+      mobileQuery.removeEventListener("change", updateMobileView);
+    };
   }, []);
 
   useEffect(() => {
@@ -161,7 +169,7 @@ export function InteractiveCardGrid<T>({
     <div className="relative">
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-background/45 backdrop-blur-md"
+        className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-background/45 backdrop-blur-none md:backdrop-blur-md"
         animate={{ opacity: resolvedActiveIndex === null ? 0 : 1 }}
         transition={transition}
       />
@@ -186,7 +194,6 @@ export function InteractiveCardGrid<T>({
               ref={(node) => {
                 cardRefs.current[index] = node;
               }}
-              layout
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -195,7 +202,7 @@ export function InteractiveCardGrid<T>({
                 isActive
                   ? { scale: 1.03, y: -10, opacity: 1, filter: "blur(0px)" }
                   : hasActiveCard
-                    ? { scale: 0.985, y: 0, opacity: 0.42, filter: "blur(2px)" }
+                    ? { scale: 0.985, y: 0, opacity: 0.42, filter: isMobileView ? "blur(0px)" : "blur(2px)" }
                     : { scale: 1, y: 0, opacity: 1, filter: "blur(0px)" }
               }
               className={cn("relative z-10 h-full outline-none", isActive && "z-30")}
@@ -211,18 +218,19 @@ export function InteractiveCardGrid<T>({
               aria-pressed={isActive}
             >
               <Card
+                data-active={isActive ? "true" : "false"}
                 className={cn(
-                  "relative flex h-full overflow-hidden border-border/60 bg-background/75 shadow-[0_20px_48px_-28px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-shadow duration-500",
+                  "relative flex h-full overflow-hidden border-border/60 bg-background/75 shadow-[0_20px_48px_-28px_rgba(0,0,0,0.32)] backdrop-blur-none md:backdrop-blur-xl transition-all duration-500",
                   isActive && "border-primary/35 shadow-[0_30px_80px_-38px_rgba(147,51,234,0.45)]",
                   cardClassName,
                 )}
               >
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.24),transparent_58%)] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_58%)]" />
 
-                <div className="relative flex h-full flex-1 flex-col">
+                <div className="relative flex h-full min-h-0 flex-1 flex-col">
                   {renderVisual ? <div className="shrink-0">{renderVisual(item, isActive)}</div> : null}
 
-                  <div className={cn("flex flex-1 flex-col p-6", contentClassName)}>
+                  <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden p-6", contentClassName)}>
                     {renderEyebrow ? <div className="mb-4">{renderEyebrow(item, isActive)}</div> : null}
 
                     <h3
@@ -234,22 +242,23 @@ export function InteractiveCardGrid<T>({
                       {getTitle(item)}
                     </h3>
 
-                    <AnimatePresence initial={false} mode="wait">
-                      {isActive ? (
-                        <motion.div
-                          key="details"
-                          layout
-                          initial={{ opacity: 0, x: detailDirection === "left" ? -28 : 28, y: 8 }}
-                          animate={{ opacity: 1, x: 0, y: 0 }}
-                          exit={{ opacity: 0, x: detailDirection === "left" ? -28 : 28, y: 4 }}
-                          transition={transition}
-                          className="overflow-hidden pt-4"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          {renderDetails(item, isActive)}
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
+                    <div className="relative mt-4 min-h-0 flex-1 overflow-hidden">
+                      <AnimatePresence initial={false} mode="wait">
+                        {isActive ? (
+                          <motion.div
+                            key="details"
+                            initial={{ opacity: 0, x: detailDirection === "left" ? -28 : 28 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: detailDirection === "left" ? -28 : 28 }}
+                            transition={transition}
+                            className="absolute inset-0 overflow-y-auto pr-1"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            {renderDetails(item, isActive)}
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </div>
               </Card>

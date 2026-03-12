@@ -84,7 +84,7 @@ const solutions = [
 
 export function SolutionsSection() {
     return (
-        <section id="solutions" className="relative z-20 py-24 bg-white dark:bg-black">
+        <section id="solutions" className="relative z-20 py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div

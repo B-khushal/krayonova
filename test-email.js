@@ -2,10 +2,14 @@
 // Run this with: node test-email.js
 // Make sure to have .env.local in the same directory
 
-require('dotenv').config({ path: '.env.local' });
-const nodemailer = require('nodemailer');
-
 async function testEmailConnection() {
+  const [{ default: dotenv }, { default: nodemailer }] = await Promise.all([
+    import('dotenv'),
+    import('nodemailer'),
+  ]);
+
+  dotenv.config({ path: '.env.local' });
+
   console.log('🧪 Testing Gmail SMTP Connection...\n');
 
   // Check environment variables

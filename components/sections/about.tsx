@@ -10,7 +10,7 @@ const team = [
 
 export function AboutSection() {
     return (
-        <section id="about" className="relative z-20 py-24 bg-white dark:bg-black">
+        <section id="about" className="relative z-20 py-24 bg-purple-200 dark:bg-black">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-8 text-center max-w-3xl mx-auto">
                     <motion.div
@@ -21,7 +21,7 @@ export function AboutSection() {
                     >
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">About KrayoNova</h2>
                         <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed italic border-l-4 border-primary pl-6 py-2 text-left bg-background/50 backdrop-blur-sm rounded-r-lg">
-                            "KrayoNova was founded with a mission to help businesses transform ideas into powerful digital products."
+                            &ldquo;KrayoNova was founded with a mission to help businesses transform ideas into powerful digital products.&rdquo;
                         </p>
                     </motion.div>
 

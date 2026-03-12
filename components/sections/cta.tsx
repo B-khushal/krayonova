@@ -70,7 +70,7 @@ export function CTASection() {
                                     size="lg"
                                     variant="outline"
                                     onClick={() => {
-                                        window.open('https://calendly.com', '_blank');
+                                        window.open('https://calendly.com', '_blank', 'noopener,noreferrer');
                                     }}
                                     className="border-primary/50 text-primary hover:bg-primary/10 hover:border-primary text-lg px-8 py-6 rounded-full group"
                                 >
