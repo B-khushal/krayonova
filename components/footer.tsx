@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Github, Twitter, Linkedin } from "lucide-react";
+import { Github, Twitter, Linkedin, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GetQuoteModal } from "@/components/get-quote-modal";
 
@@ -27,6 +27,7 @@ export function Footer() {
                             </Button>
                             <div className="flex space-x-4 text-muted-foreground">
                                 <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Twitter className="h-5 w-5" /></Link>
+                                <Link href="https://instagram.com/krayonova" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Instagram className="h-5 w-5" /></Link>
                                 <Link href="https://github.com/B-khushal" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Github className="h-5 w-5" /></Link>
                                 <Link href="https://www.linkedin.com/in/badodhe-khushal-prasad-b00b51284" target="_blank" rel="noopener noreferrer" className="premium-nav-link hover:text-purple-800 dark:hover:text-purple-400 transition-colors"><Linkedin className="h-5 w-5" /></Link>
                             </div>
