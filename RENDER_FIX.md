@@ -11,8 +11,8 @@ KrayoNova should run as a static deployment with Next.js export output.
 ### Required Render configuration
 
 - Service Type: `Static Site`
-- Build Command: `npm install && npm run build && npm run export`
-- Publish Directory: `out`
+- Build Command: `npm install && npm run build`
+- Publish Directory: `dist`
 - Rewrite rule: `/* -> /index.html` (type `Rewrite`)
 
 ## Why this fixes deployment issues
@@ -26,5 +26,5 @@ KrayoNova should run as a static deployment with Next.js export output.
 - `render.yaml` uses `type: static_site`
 - No start command is configured
 - `next.config.ts` includes `output: "export"`
-- Build generates `out/`
+- Build generates `dist/`
 - Routes load correctly after refresh

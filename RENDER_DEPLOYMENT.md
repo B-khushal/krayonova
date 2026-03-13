@@ -12,10 +12,10 @@ Do not use `Web Service` for this project.
 
 ## 2. Build and publish configuration
 
-Use the Next.js static export workflow:
+Use the Next.js static build workflow:
 
-- Build Command: `npm install && npm run build && npm run export`
-- Publish Directory: `out`
+- Build Command: `npm install && npm run build`
+- Publish Directory: `dist`
 
 ## 3. Routing fallback for SPA behavior
 
@@ -32,8 +32,8 @@ This ensures deep links and client-side routing continue to work.
 This repository includes `render.yaml` with static-site settings:
 
 - `type: static_site`
-- `buildCommand: npm install && npm run build && npm run export`
-- `staticPublishPath: out`
+- `buildCommand: npm install && npm run build`
+- `staticPublishPath: dist`
 - Rewrite route to `/index.html`
 
 ## 5. Verify build output before pushing
@@ -43,13 +43,12 @@ Run locally:
 ```bash
 npm install
 npm run build
-npm run export
 ```
 
-Confirm `out/` exists and contains files such as:
+Confirm `dist/` exists and contains files such as:
 
-- `out/index.html`
-- `out/_next/...` assets
+- `dist/index.html`
+- `dist/_next/...` assets
 
 ## 6. Deploy
 
@@ -59,4 +58,4 @@ git commit -m "Configure Render Static Site deployment"
 git push origin main
 ```
 
-Render will build and publish the static output from `out/`.
+Render will build and publish the static output from `dist/`.

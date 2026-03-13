@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
-    "export": "node -e \"const fs=require('fs');if(!fs.existsSync('out')){console.error('Static export output missing. Set output export in next.config.ts and run npm run build first.');process.exit(1);}console.log('Static export is ready in out/.');\"",
+    "build": "next build --webpack && node scripts/prepare-dist.mjs",
     "lint": "eslint"
   },
   "engines": {
@@ -13,6 +12,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
+    "@emailjs/browser": "^4.4.1",
     "@paper-design/shaders-react": "^0.0.71",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",

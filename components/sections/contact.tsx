@@ -14,12 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { sendContactEmail } from "@/lib/emailjs";
 
 export function ContactSection() {
-    const contactEmail = "krayonova@gmail.com";
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        phone: "",
         company: "",
         projectType: "",
         budget: "",
@@ -29,29 +30,15 @@ export function ContactSection() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [submitError, setSubmitError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setSubmitError("");
         
         try {
-            const subject = `New Quote Request: ${formData.name}`;
-            const body = [
-                `Name: ${formData.name}`,
-                `Email: ${formData.email}`,
-                `Company: ${formData.company || "N/A"}`,
-                `Project Type: ${formData.projectType}`,
-                `Budget: ${formData.budget}`,
-                `Timeline: ${formData.timeline}`,
-                "",
-                "Project Description:",
-                formData.description,
-            ].join("\n");
-
-            const mailtoUrl = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoUrl;
-
-            setIsSubmitting(false);
+            await sendContactEmail(formData);
             setIsSubmitted(true);
             
             // Reset form after 3 seconds
@@ -60,6 +47,7 @@ export function ContactSection() {
                 setFormData({
                     name: "",
                     email: "",
+                    phone: "",
                     company: "",
                     projectType: "",
                     budget: "",
@@ -68,10 +56,11 @@ export function ContactSection() {
                 });
             }, 3000);
         } catch (error) {
-            console.error('Error preparing email submission:', error);
+            console.error("Error sending contact email:", error);
+            const errorMessage = error instanceof Error ? error.message : "Failed to send message. Please try again.";
+            setSubmitError(errorMessage);
+        } finally {
             setIsSubmitting(false);
-            const errorMessage = error instanceof Error ? error.message : 'Failed to prepare email. Please try again.';
-            alert(errorMessage);
         }
     };
 
@@ -196,6 +185,18 @@ export function ContactSection() {
                                 </div>
 
                                 <div className="space-y-2 text-left">
+                                    <Label htmlFor="contact-phone">Phone *</Label>
+                                    <Input
+                                        id="contact-phone"
+                                        required
+                                        placeholder="+91 9876543210"
+                                        className="bg-background/50"
+                                        value={formData.phone}
+                                        onChange={(e) => handleChange("phone", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="space-y-2 text-left">
                                     <Label htmlFor="contact-company">Company Name</Label>
                                     <Input 
                                         id="contact-company" 
@@ -288,6 +289,10 @@ export function ContactSection() {
                                 >
                                     {isSubmitting ? "Submitting..." : "Request Quote"}
                                 </Button>
+
+                                {submitError && (
+                                    <p className="text-sm text-red-600 dark:text-red-400">{submitError}</p>
+                                )}
                             </form>
                         )}
                     </motion.div>
