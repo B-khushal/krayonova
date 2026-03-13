@@ -1,17 +1,10 @@
 services:
-  - type: web
+  - type: static_site
     name: krayonova
-    runtime: node
     region: oregon
-    plan: free
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start -- --hostname 0.0.0.0 --port $PORT
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: EMAIL_USER
-        sync: false
-      - key: EMAIL_PASS
-        sync: false
-      - key: CONTACT_EMAIL
-        sync: false
+    buildCommand: npm install && npm run build && npm run export
+    staticPublishPath: out
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

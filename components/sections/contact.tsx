@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 
 export function ContactSection() {
+    const contactEmail = "krayonova@gmail.com";
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -29,24 +30,26 @@ export function ContactSection() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         
         try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+            const subject = `New Quote Request: ${formData.name}`;
+            const body = [
+                `Name: ${formData.name}`,
+                `Email: ${formData.email}`,
+                `Company: ${formData.company || "N/A"}`,
+                `Project Type: ${formData.projectType}`,
+                `Budget: ${formData.budget}`,
+                `Timeline: ${formData.timeline}`,
+                "",
+                "Project Description:",
+                formData.description,
+            ].join("\n");
 
-            const data = await response.json();
-
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || 'Failed to submit form');
-            }
+            const mailtoUrl = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoUrl;
 
             setIsSubmitting(false);
             setIsSubmitted(true);
@@ -65,9 +68,9 @@ export function ContactSection() {
                 });
             }, 3000);
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error('Error preparing email submission:', error);
             setIsSubmitting(false);
-            const errorMessage = error instanceof Error ? error.message : 'Failed to submit form. Please try again.';
+            const errorMessage = error instanceof Error ? error.message : 'Failed to prepare email. Please try again.';
             alert(errorMessage);
         }
     };
