@@ -76,7 +76,7 @@ export default function LiquidMetalHero({
             <motion.h1 
               role="heading" 
               aria-level={1}
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-primary leading-tight tracking-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight tracking-tight text-primary dark:bg-gradient-to-r dark:from-white dark:via-purple-100 dark:to-purple-300 dark:bg-clip-text dark:text-transparent dark:drop-shadow-[0_0_28px_rgba(168,85,247,0.35)]"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease: "easeInOut" }}
