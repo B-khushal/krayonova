@@ -125,7 +125,7 @@ export function PortfolioSection() {
         : projects.filter(project => project.category === selectedCategory);
 
     return (
-        <section id="portfolio" className="relative z-20 py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
+        <section id="portfolio" className="relative z-20 py-24 bg-gradient-to-br from-primary/8 via-background/60 to-primary/6 dark:from-purple-950/30 dark:via-background/45 dark:to-purple-900/28">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div
@@ -171,17 +171,17 @@ export function PortfolioSection() {
                     items={filteredProjects}
                     getItemKey={(project, index) => `${project.title}-${index}`}
                     getTitle={(project) => project.title}
+                    getTagline={(project) => `Custom ${project.category.toLowerCase()} crafted for speed and measurable growth.`}
                     gridClassName="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                    cardClassName="min-h-[31rem]"
-                    renderVisual={(project, isActive) => (
-                        <div className="relative h-52 overflow-hidden md:h-56">
+                    renderFrontVisual={(project, isFlipped) => (
+                        <div className="relative h-44 overflow-hidden md:h-48">
                             <Image
                                 src={project.image}
                                 alt={project.title}
                                 fill
                                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                 className={`object-cover transition-transform duration-500 ${
-                                    isActive ? "scale-110" : "scale-100"
+                                    isFlipped ? "scale-110" : "scale-100"
                                 }`}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -192,13 +192,16 @@ export function PortfolioSection() {
                             </div>
                         </div>
                     )}
-                    renderEyebrow={(project) => (
+                    renderFrontEyebrow={(project) => (
                         <p className="text-sm font-medium uppercase tracking-[0.22em] text-primary/70">
                             {project.category}
                         </p>
                     )}
-                    renderDetails={(project) => (
+                    renderBack={(project) => (
                         <div className="space-y-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/75">
+                                Project Details
+                            </p>
                             <p className="text-sm leading-6 text-muted-foreground">
                                 {project.description}
                             </p>
@@ -208,7 +211,7 @@ export function PortfolioSection() {
                                     <Badge
                                         key={tech}
                                         variant="secondary"
-                                        className="border-primary/10 bg-primary/8 text-primary"
+                                        className="border-primary/15 bg-primary/10 text-primary"
                                     >
                                         {tech}
                                     </Badge>

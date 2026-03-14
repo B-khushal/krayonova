@@ -13,7 +13,7 @@ const steps = [
 
 export function ProcessSection() {
     return (
-        <section id="process" className="relative z-20 py-24 bg-purple-200 dark:bg-background">
+        <section id="process" className="relative z-20 py-24 bg-gradient-to-br from-purple-100 via-white to-purple-200 dark:from-black dark:via-purple-950 dark:to-purple-700/80">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div
@@ -30,15 +30,21 @@ export function ProcessSection() {
                 </div>
 
                 <div className="relative max-w-4xl mx-auto">
-                    <div className="absolute left-1/2 -ml-0.5 w-[1px] h-full bg-border/50 hidden md:block" />
+                    <motion.div
+                        className="absolute left-1/2 -ml-0.5 w-[1px] h-full bg-border/50 hidden md:block origin-top"
+                        initial={{ scaleY: 0, opacity: 0.4 }}
+                        whileInView={{ scaleY: 1, opacity: 1 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.7, ease: "easeInOut" }}
+                    />
                     <div className="space-y-12">
                         {steps.map((step, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
-                                transition={{ duration: 0.5, delay: 0.1 }}
+                                transition={{ duration: 0.55, delay: index * 0.12, ease: "easeInOut" }}
                                 className={`relative flex flex-col md:flex-row items-center ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
                             >
                                 <div className="flex-1 w-full text-center md:text-left px-8 py-4">
@@ -49,9 +55,15 @@ export function ProcessSection() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="absolute left-1/2 -ml-6 hidden md:flex h-12 w-12 items-center justify-center rounded-full border-4 border-background bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                                <motion.div
+                                    className="absolute left-1/2 -ml-6 hidden md:flex h-12 w-12 items-center justify-center rounded-full border-4 border-background bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                                    initial={{ scale: 0.9, opacity: 0 }}
+                                    whileInView={{ scale: 1, opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: 0.12 + index * 0.1, ease: "easeInOut" }}
+                                >
                                     <step.icon className="h-5 w-5" />
-                                </div>
+                                </motion.div>
                                 <div className="flex-1 w-full flex justify-center md:hidden mb-4">
                                     <div className="h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 flex">
                                         <step.icon className="h-5 w-5" />

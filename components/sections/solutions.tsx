@@ -18,73 +18,81 @@ import { InteractiveCardGrid } from "@/components/ui/interactive-card-grid";
 const solutions = [
     {
         title: "Admin Dashboards",
-        description: "Powerful control panels for managing your business operations",
+        tagline: "Control operations with clarity and speed",
+        details: "Powerful control panels that centralize business workflows, user actions, and high-impact reporting in one secure workspace.",
         icon: LayoutDashboard,
         color: "text-purple-600 dark:text-purple-400",
         bgColor: "bg-purple-100 dark:bg-purple-900/20",
-        highlights: ["Reporting", "Permissions", "Workflow control"]
+        technologies: ["Next.js", "TypeScript", "PostgreSQL"]
     },
     {
         title: "POS Billing Systems",
-        description: "Point-of-sale solutions for retail and restaurant businesses",
+        tagline: "Fast checkout experiences for modern counters",
+        details: "Point-of-sale systems for retail and restaurants with resilient billing, product sync, and smooth front-desk operations.",
         icon: ShoppingCart,
         color: "text-blue-600 dark:text-blue-400",
         bgColor: "bg-blue-100 dark:bg-blue-900/20",
-        highlights: ["Billing", "Receipts", "Realtime inventory"]
+        technologies: ["React", "Node.js", "SQLite"]
     },
     {
         title: "School Management",
-        description: "Complete educational institution management platforms",
+        tagline: "Digitize academics, fees, and attendance",
+        details: "Complete school and college management platforms that streamline administration, communication, and academic records.",
         icon: GraduationCap,
         color: "text-green-600 dark:text-green-400",
         bgColor: "bg-green-100 dark:bg-green-900/20",
-        highlights: ["Attendance", "Fees", "Academic records"]
+        technologies: ["React", "Express", "MongoDB"]
     },
     {
         title: "Business CRMs",
-        description: "Customer relationship management for growing teams",
+        tagline: "Track leads and move pipelines confidently",
+        details: "CRM platforms designed for growth-stage teams to capture leads, automate follow-ups, and keep sales pipelines accurate.",
         icon: Users,
         color: "text-orange-600 dark:text-orange-400",
         bgColor: "bg-orange-100 dark:bg-orange-900/20",
-        highlights: ["Pipelines", "Lead tracking", "Automation"]
+        technologies: ["Next.js", "GraphQL", "Redis"]
     },
     {
         title: "Analytics Dashboards",
-        description: "Data visualization and business intelligence tools",
+        tagline: "Transform raw metrics into strategic insight",
+        details: "Business intelligence dashboards that convert data into decision-ready insights through live charts and custom reporting layers.",
         icon: BarChart3,
         color: "text-pink-600 dark:text-pink-400",
         bgColor: "bg-pink-100 dark:bg-pink-900/20",
-        highlights: ["KPIs", "Insights", "Custom reports"]
+        technologies: ["D3.js", "Next.js", "FastAPI"]
     },
     {
         title: "Mobile Applications",
-        description: "Native and cross-platform mobile app development",
+        tagline: "Cross-platform apps users actually keep",
+        details: "Native and cross-platform mobile experiences optimized for smooth performance, strong retention, and offline-first reliability.",
         icon: Smartphone,
         color: "text-cyan-600 dark:text-cyan-400",
         bgColor: "bg-cyan-100 dark:bg-cyan-900/20",
-        highlights: ["iOS", "Android", "Offline-ready UX"]
+        technologies: ["React Native", "Firebase", "TypeScript"]
     },
     {
         title: "Inventory Systems",
-        description: "Real-time inventory tracking and warehouse management",
+        tagline: "Maintain stock accuracy in real time",
+        details: "Inventory and warehouse systems with real-time stock movement, alerting, and purchase-order synchronization.",
         icon: PackageCheck,
         color: "text-yellow-600 dark:text-yellow-400",
         bgColor: "bg-yellow-100 dark:bg-yellow-900/20",
-        highlights: ["Stock alerts", "Warehousing", "Order sync"]
+        technologies: ["Vue", "Laravel", "MySQL"]
     },
     {
         title: "SaaS Platforms",
-        description: "Scalable software-as-a-service solutions for any industry",
+        tagline: "Ship multi-tenant products with confidence",
+        details: "Scalable SaaS platforms with tenant isolation, subscription workflows, and robust backend APIs built for growth.",
         icon: Layers,
         color: "text-indigo-600 dark:text-indigo-400",
         bgColor: "bg-indigo-100 dark:bg-indigo-900/20",
-        highlights: ["Subscriptions", "Tenant isolation", "Scalable APIs"]
+        technologies: ["Next.js", "Prisma", "PostgreSQL"]
     },
 ];
 
 export function SolutionsSection() {
     return (
-        <section id="solutions" className="relative z-20 py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
+        <section id="solutions" className="relative z-20 py-24 bg-gradient-to-br from-primary/8 via-background/60 to-primary/6 dark:from-purple-950/30 dark:via-background/45 dark:to-purple-900/28">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
                     <motion.div
@@ -106,34 +114,37 @@ export function SolutionsSection() {
                     items={solutions}
                     getItemKey={(solution) => solution.title}
                     getTitle={(solution) => solution.title}
+                    getTagline={(solution) => solution.tagline}
                     gridClassName="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
-                    cardClassName="min-h-[20rem]"
-                    renderVisual={(solution, isActive) => (
+                    renderFrontVisual={(solution, isFlipped) => (
                         <div className="px-6 pt-6">
-                            <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${solution.bgColor} ${solution.color} transition-transform duration-500 ${isActive ? "scale-110" : "scale-100"}`}>
+                            <div className={`flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 ${solution.bgColor} ${solution.color} transition-transform duration-500 ${isFlipped ? "scale-110" : "scale-100"}`}>
                                 <solution.icon className="h-8 w-8" />
                             </div>
                         </div>
                     )}
-                    renderEyebrow={() => (
+                    renderFrontEyebrow={() => (
                         <p className="text-sm font-medium uppercase tracking-[0.22em] text-primary/70">
                             Tailored systems
                         </p>
                     )}
-                    renderDetails={(solution) => (
+                    renderBack={(solution) => (
                         <div className="space-y-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/75">
+                                Build Focus
+                            </p>
                             <p className="text-sm leading-6 text-muted-foreground">
-                                {solution.description}
+                                {solution.details}
                             </p>
 
                             <div className="flex flex-wrap gap-2">
-                                {solution.highlights.map((highlight) => (
+                                {solution.technologies.map((technology) => (
                                     <Badge
-                                        key={highlight}
+                                        key={technology}
                                         variant="secondary"
-                                        className="border-primary/10 bg-primary/8 text-primary"
+                                        className="border-primary/15 bg-primary/10 text-primary"
                                     >
-                                        {highlight}
+                                        {technology}
                                     </Badge>
                                 ))}
                             </div>

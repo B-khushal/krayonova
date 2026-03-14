@@ -4,7 +4,7 @@ import { LiquidMetal, liquidMetalPresets } from '@paper-design/shaders-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
 interface LiquidMetalHeroProps {
   badge?: string;
@@ -27,35 +27,12 @@ export default function LiquidMetalHero({
   onSecondaryCtaClick,
   features = [],
 }: LiquidMetalHeroProps) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0
-    }
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
-      scale: 1
-    }
-  };
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const heroParallaxY = useTransform(scrollYProgress, [0, 0.35], [0, 28]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/3">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/8 via-background/60 to-primary/6 dark:from-purple-950/30 dark:via-background/45 dark:to-purple-900/28">
       <LiquidMetal
         {...liquidMetalPresets[2]}
         style={{ 
@@ -69,15 +46,17 @@ export default function LiquidMetalHero({
       <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
         <motion.div 
           className="text-center space-y-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{ y: prefersReducedMotion ? 0 : heroParallaxY }}
         >
           {badge && (
             <motion.div 
               className="flex justify-center"
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.05, ease: "easeInOut" }}
             >
               <Badge 
                 variant="secondary" 
@@ -90,20 +69,26 @@ export default function LiquidMetalHero({
           
           <motion.div 
             className="space-y-6"
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: "easeInOut" }}
           >
             <motion.h1 
               role="heading" 
               aria-level={1}
               className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-primary leading-tight tracking-tight"
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeInOut" }}
             >
               {title}
             </motion.h1>
             
             <motion.p 
               className="max-w-3xl mx-auto text-xl sm:text-2xl text-foreground/90 leading-relaxed font-bold text-left sm:text-center"
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeInOut" }}
             >
               {subtitle}
             </motion.p>
@@ -111,7 +96,9 @@ export default function LiquidMetalHero({
           
           <motion.div 
             className="flex flex-row gap-3 sm:gap-4 justify-start sm:justify-center items-center"
-            variants={buttonVariants}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3, ease: "easeInOut" }}
           >
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -146,7 +133,23 @@ export default function LiquidMetalHero({
           {features.length > 0 && (
             <motion.div 
               className="pt-12"
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 18 }}
+              animate={
+                prefersReducedMotion
+                  ? { opacity: 1, y: 0 }
+                  : {
+                      opacity: 1,
+                      y: [0, -8, 0],
+                    }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0.6, delay: 0.35, ease: "easeInOut" }
+                  : {
+                      opacity: { duration: 0.6, delay: 0.35, ease: "easeInOut" },
+                      y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+                    }
+              }
             >
               <motion.div
                 whileHover={{ y: -4 }}

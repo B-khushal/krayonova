@@ -14,7 +14,7 @@ const features = [
 
 export function HostingSection() {
     return (
-        <section id="hosting" className="relative z-20 py-24 bg-purple-200 dark:bg-purple-600 border-t border-b border-border/40">
+        <section id="hosting" className="relative z-20 py-24 bg-gradient-to-br from-purple-100 via-white to-purple-200 dark:from-black dark:via-purple-950 dark:to-purple-700/80">
             <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <motion.div

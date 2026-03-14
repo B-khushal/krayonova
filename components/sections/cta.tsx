@@ -1,17 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar } from "lucide-react";
 import { GetQuoteModal } from "@/components/get-quote-modal";
 
 export function CTASection() {
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+    const prefersReducedMotion = useReducedMotion();
 
     return (
         <>
-            <section className="relative z-20 py-24 bg-gradient-to-br from-primary/10 via-background to-primary/5">
+            <section className="relative z-20 overflow-hidden py-24 bg-gradient-to-br from-primary/8 via-background/60 to-primary/6 dark:from-purple-950/30 dark:via-background/45 dark:to-purple-900/28">
+                <motion.div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -inset-24 bg-[radial-gradient(circle_at_30%_20%,rgba(168,85,247,0.2),transparent_55%),radial-gradient(circle_at_70%_75%,rgba(147,51,234,0.18),transparent_58%)]"
+                    animate={
+                        prefersReducedMotion
+                            ? { opacity: 0.75 }
+                            : { opacity: [0.6, 0.85, 0.65], scale: [1, 1.04, 1] }
+                    }
+                    transition={
+                        prefersReducedMotion
+                            ? { duration: 0.4 }
+                            : { duration: 8, repeat: Infinity, ease: "easeInOut" }
+                    }
+                />
                 <div className="container px-4 md:px-6 mx-auto max-w-screen-xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -49,13 +64,30 @@ export function CTASection() {
                             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
                         >
                             <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.03, y: -3 }}
+                                whileTap={{ scale: 0.96 }}
+                                animate={
+                                    prefersReducedMotion
+                                        ? { boxShadow: "0 0 0 rgba(147,51,234,0)" }
+                                        : {
+                                            boxShadow: [
+                                                "0 0 0 rgba(147,51,234,0.05)",
+                                                "0 0 36px rgba(147,51,234,0.28)",
+                                                "0 0 0 rgba(147,51,234,0.05)",
+                                            ],
+                                        }
+                                }
+                                transition={
+                                    prefersReducedMotion
+                                        ? { duration: 0.4 }
+                                        : { duration: 4.8, repeat: Infinity, ease: "easeInOut" }
+                                }
+                                className="rounded-full"
                             >
                                 <Button
                                     size="lg"
                                     onClick={() => setIsQuoteOpen(true)}
-                                    className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 rounded-full group"
+                                    className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 rounded-full group transition-all duration-500 ease-in-out"
                                 >
                                     Get a Quote
                                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

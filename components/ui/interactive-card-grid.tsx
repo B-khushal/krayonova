@@ -3,32 +3,29 @@
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
-  useEffect,
-  useEffectEvent,
-  useRef,
   useState,
 } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-
-type CardSide = "left" | "right";
 
 interface InteractiveCardGridProps<T> {
   items: T[];
   getItemKey: (item: T, index: number) => string;
   getTitle: (item: T) => ReactNode;
-  renderDetails: (item: T, isActive: boolean) => ReactNode;
-  renderVisual?: (item: T, isActive: boolean) => ReactNode;
-  renderEyebrow?: (item: T, isActive: boolean) => ReactNode;
+  getTagline: (item: T) => ReactNode;
+  renderBack: (item: T, isFlipped: boolean) => ReactNode;
+  renderFrontVisual?: (item: T, isFlipped: boolean) => ReactNode;
+  renderFrontEyebrow?: (item: T, isFlipped: boolean) => ReactNode;
   gridClassName?: string;
   cardClassName?: string;
-  contentClassName?: string;
+  frontContentClassName?: string;
+  backContentClassName?: string;
 }
 
 const transition = {
-  duration: 0.4,
+  duration: 0.65,
   ease: [0.22, 1, 0.36, 1] as const,
 };
 
@@ -36,236 +33,123 @@ export function InteractiveCardGrid<T>({
   items,
   getItemKey,
   getTitle,
-  renderDetails,
-  renderVisual,
-  renderEyebrow,
+  getTagline,
+  renderBack,
+  renderFrontVisual,
+  renderFrontEyebrow,
   gridClassName,
   cardClassName,
-  contentClassName,
+  frontContentClassName,
+  backContentClassName,
 }: InteractiveCardGridProps<T>) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [supportsHover, setSupportsHover] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(false);
-  const [cardSides, setCardSides] = useState<Record<number, CardSide>>({});
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const resolvedActiveIndex = activeIndex !== null && activeIndex < items.length ? activeIndex : null;
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [toggledCards, setToggledCards] = useState<Record<number, boolean>>({});
 
-  const updateCardSides = useEffectEvent(() => {
-    const container = containerRef.current;
-
-    if (!container) {
-      return;
-    }
-
-    const containerRect = container.getBoundingClientRect();
-    const midpoint = containerRect.left + containerRect.width / 2;
-    const nextSides: Record<number, CardSide> = {};
-
-    cardRefs.current.forEach((card, index) => {
-      if (!card) {
-        return;
-      }
-
-      const rect = card.getBoundingClientRect();
-      const center = rect.left + rect.width / 2;
-      nextSides[index] = center <= midpoint ? "left" : "right";
-    });
-
-    setCardSides(nextSides);
-  });
-
-  const handleOutsidePointerDown = useEffectEvent((event: PointerEvent) => {
-    const target = event.target;
-
-    if (!(target instanceof Node)) {
-      return;
-    }
-
-    if (!containerRef.current?.contains(target)) {
-      setActiveIndex(null);
-    }
-  });
-
-  const handleEscapeKey = useEffectEvent((event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      setActiveIndex(null);
-    }
-  });
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const mobileQuery = window.matchMedia("(max-width: 767px)");
-    const updateSupport = () => setSupportsHover(mediaQuery.matches);
-    const updateMobileView = () => setIsMobileView(mobileQuery.matches);
-
-    updateSupport();
-    updateMobileView();
-    mediaQuery.addEventListener("change", updateSupport);
-    mobileQuery.addEventListener("change", updateMobileView);
-
-    return () => {
-      mediaQuery.removeEventListener("change", updateSupport);
-      mobileQuery.removeEventListener("change", updateMobileView);
-    };
-  }, []);
-
-  useEffect(() => {
-    cardRefs.current = cardRefs.current.slice(0, items.length);
-    updateCardSides();
-  }, [items.length]);
-
-  useEffect(() => {
-    if (typeof ResizeObserver === "undefined") {
-      return;
-    }
-
-    const resizeObserver = new ResizeObserver(() => updateCardSides());
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    cardRefs.current.forEach((card) => {
-      if (card) {
-        resizeObserver.observe(card);
-      }
-    });
-
-    window.addEventListener("resize", updateCardSides);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateCardSides);
-    };
-  }, [items.length]);
-
-  useEffect(() => {
-    if (resolvedActiveIndex === null) {
-      return;
-    }
-
-    document.addEventListener("pointerdown", handleOutsidePointerDown);
-    document.addEventListener("keydown", handleEscapeKey);
-
-    return () => {
-      document.removeEventListener("pointerdown", handleOutsidePointerDown);
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, [resolvedActiveIndex]);
+  const toggleCard = (index: number) => {
+    setToggledCards((current) => ({
+      ...current,
+      [index]: !current[index],
+    }));
+  };
 
   const onCardKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>, index: number) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      setActiveIndex((current) => (current === index ? null : index));
+      toggleCard(index);
     }
 
     if (event.key === "Escape") {
-      setActiveIndex(null);
+      setToggledCards((current) => ({
+        ...current,
+        [index]: false,
+      }));
     }
   };
 
   return (
-    <div className="relative">
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-background/45 backdrop-blur-none md:backdrop-blur-md"
-        animate={{ opacity: resolvedActiveIndex === null ? 0 : 1 }}
-        transition={transition}
-      />
+    <div className={cn("relative grid gap-6 px-1 py-3", gridClassName)}>
+      {items.map((item, index) => {
+        const isFlipped = hoveredIndex === index || Boolean(toggledCards[index]);
 
-      <div
-        ref={containerRef}
-        className={cn("relative grid gap-6 px-1 py-3", gridClassName)}
-        onMouseLeave={() => {
-          if (supportsHover) {
-            setActiveIndex(null);
-          }
-        }}
-      >
-        {items.map((item, index) => {
-          const isActive = resolvedActiveIndex === index;
-          const hasActiveCard = resolvedActiveIndex !== null;
-          const detailDirection = cardSides[index] ?? (index % 2 === 0 ? "left" : "right");
-
-          return (
-            <motion.div
-              key={getItemKey(item, index)}
-              ref={(node) => {
-                cardRefs.current[index] = node;
-              }}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ ...transition, delay: index * 0.05 }}
-              animate={
-                isActive
-                  ? { scale: 1.03, y: -10, opacity: 1, filter: "blur(0px)" }
-                  : hasActiveCard
-                    ? { scale: 0.985, y: 0, opacity: 0.42, filter: isMobileView ? "blur(0px)" : "blur(2px)" }
-                    : { scale: 1, y: 0, opacity: 1, filter: "blur(0px)" }
+        return (
+          <motion.div
+            key={getItemKey(item, index)}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ ...transition, delay: index * 0.1 }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            className={cn("group relative h-full [perspective:1400px]", cardClassName)}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") {
+                setHoveredIndex(index);
               }
-              className={cn("relative z-10 h-full outline-none", isActive && "z-30")}
-              onMouseEnter={() => {
-                if (supportsHover) {
-                  setActiveIndex(index);
-                }
+            }}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse") {
+                setHoveredIndex((current) => (current === index ? null : current));
+              }
+            }}
+            onPointerUp={(event) => {
+              if (event.pointerType !== "mouse") {
+                toggleCard(index);
+              }
+            }}
+            onKeyDown={(event) => onCardKeyDown(event, index)}
+            role="button"
+            tabIndex={0}
+            aria-pressed={isFlipped}
+            aria-label={`Flip card for ${String(getTitle(item))}`}
+          >
+            <div
+              className="grid h-full transform-gpu [transform-style:preserve-3d] will-change-transform"
+              style={{
+                transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+                transition: "transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)",
               }}
-              onClick={() => setActiveIndex((current) => (current === index ? null : index))}
-              onKeyDown={(event) => onCardKeyDown(event, index)}
-              role="button"
-              tabIndex={0}
-              aria-pressed={isActive}
             >
               <Card
-                data-active={isActive ? "true" : "false"}
                 className={cn(
-                  "relative flex h-full overflow-hidden border-border/60 bg-background/75 shadow-[0_20px_48px_-28px_rgba(0,0,0,0.32)] backdrop-blur-none md:backdrop-blur-xl transition-all duration-500",
-                  isActive && "border-primary/35 shadow-[0_30px_80px_-38px_rgba(147,51,234,0.45)]",
-                  cardClassName,
+                  "[grid-area:1/1] flex h-full flex-col overflow-hidden border-primary/20 bg-white/90 shadow-[0_20px_50px_-30px_rgba(126,34,206,0.45)] [backface-visibility:hidden] transition-all duration-500 ease-in-out group-hover:border-primary/35 group-hover:shadow-[0_30px_78px_-36px_rgba(147,51,234,0.55)]",
+                  "dark:bg-background/85 dark:shadow-[0_24px_64px_-34px_rgba(147,51,234,0.52)] dark:group-hover:shadow-[0_34px_90px_-38px_rgba(168,85,247,0.6)]",
                 )}
               >
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.24),transparent_58%)] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_58%)]" />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(196,181,253,0.5),transparent_60%)]" />
 
                 <div className="relative flex h-full min-h-0 flex-1 flex-col">
-                  {renderVisual ? <div className="shrink-0">{renderVisual(item, isActive)}</div> : null}
+                  {renderFrontVisual ? <div className="shrink-0">{renderFrontVisual(item, isFlipped)}</div> : null}
 
-                  <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden p-6", contentClassName)}>
-                    {renderEyebrow ? <div className="mb-4">{renderEyebrow(item, isActive)}</div> : null}
+                  <div className={cn("flex min-h-0 flex-1 flex-col p-5", frontContentClassName)}>
+                    {renderFrontEyebrow ? <div className="mb-4">{renderFrontEyebrow(item, isFlipped)}</div> : null}
 
-                    <h3
-                      className={cn(
-                        "text-xl font-semibold tracking-tight text-foreground transition-colors duration-300",
-                        isActive && "text-primary",
-                      )}
-                    >
+                    <h3 className="text-xl font-semibold tracking-tight text-foreground">
                       {getTitle(item)}
                     </h3>
-
-                    <div className="relative mt-4 min-h-0 flex-1 overflow-hidden">
-                      <AnimatePresence initial={false} mode="wait">
-                        {isActive ? (
-                          <motion.div
-                            key="details"
-                            initial={{ opacity: 0, x: detailDirection === "left" ? -28 : 28 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: detailDirection === "left" ? -28 : 28 }}
-                            transition={transition}
-                            className="absolute inset-0 overflow-y-auto pr-1"
-                            onClick={(event) => event.stopPropagation()}
-                          >
-                            {renderDetails(item, isActive)}
-                          </motion.div>
-                        ) : null}
-                      </AnimatePresence>
-                    </div>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                      {getTagline(item)}
+                    </p>
                   </div>
                 </div>
               </Card>
-            </motion.div>
-          );
-        })}
-      </div>
+
+              <Card
+                className={cn(
+                  "[grid-area:1/1] flex h-full flex-col overflow-hidden border-primary/35 bg-gradient-to-br from-primary/10 via-white to-primary/5 shadow-[0_24px_64px_-34px_rgba(147,51,234,0.55)] transition-all duration-500 ease-in-out group-hover:shadow-[0_36px_90px_-40px_rgba(147,51,234,0.58)]",
+                  "[backface-visibility:hidden] [transform:rotateY(180deg)] dark:from-primary/25 dark:via-background/90 dark:to-primary/10",
+                )}
+              >
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.25),transparent_62%)]" />
+                <div
+                  className={cn("relative flex h-full min-h-0 flex-1 flex-col overflow-y-auto p-5", backContentClassName)}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {renderBack(item, isFlipped)}
+                </div>
+              </Card>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
