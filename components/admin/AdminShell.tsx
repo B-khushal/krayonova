@@ -66,6 +66,7 @@ import SidebarGroup from "./SidebarGroup";
 import AdminHeader from "./AdminHeader";
 import LogoutButton from "@/components/LogoutButton";
 import { ToastProvider } from "@/components/admin/ui/Toast";
+import BrandLogo from "@/components/BrandLogo";
 
 type AdminShellProps = {
   children: React.ReactNode;
@@ -105,19 +106,14 @@ export default function AdminShell({ children, userName, userRole }: AdminShellP
         {/* Logo */}
         <div className={`h-16 flex items-center border-b border-border-soft shrink-0 ${sidebarCollapsed ? "justify-center px-2" : "px-5"}`}>
           {sidebarCollapsed ? (
-            <Link href="/admin" className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm shadow-sm">
-              K
-            </Link>
+            <BrandLogo href="/admin" showWordmark={false} className="justify-center" />
           ) : (
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-shadow">
-                K
-              </div>
+            <div className="flex items-center gap-2.5 group">
+              <BrandLogo href="/" className="gap-2.5" />
               <div className="flex flex-col">
-                <span className="text-sm font-display font-bold text-text-primary leading-tight">KrayoNova</span>
                 <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-primary">Agency OS</span>
               </div>
-            </Link>
+            </div>
           )}
         </div>
 

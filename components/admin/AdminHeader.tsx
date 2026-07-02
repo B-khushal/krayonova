@@ -51,7 +51,7 @@ export default function AdminHeader({
   onSearchOpen,
   onQuickCreate,
 }: AdminHeaderProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/admin";
 
   // Find the best matching title
   let pageTitle = "Admin";

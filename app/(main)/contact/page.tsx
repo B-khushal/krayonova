@@ -16,7 +16,7 @@ function ContactForm() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const plan = searchParams.get("plan");
+    const plan = searchParams?.get("plan");
     if (plan) {
       setDetails(`Interested in the ${plan} Plan. Let's discuss details.`);
     }

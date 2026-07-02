@@ -26,7 +26,7 @@ export default function SidebarGroup({
   collapsed = false,
   defaultOpen = false,
 }: SidebarGroupProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/admin";
   const hasActiveChild = links.some((link) => pathname === link.href || (link.href !== "/admin" && pathname.startsWith(link.href)));
   const [open, setOpen] = useState(defaultOpen || hasActiveChild);
 

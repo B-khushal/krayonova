@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { useCollection } from "@/hooks/use-content";
+import { displayText } from "@/lib/utils";
 
 export default function Portfolio() {
   const { data: dynamicProjects, loading } = useCollection<any>("projects", { orderBy: { field: "order" } });
@@ -43,13 +44,13 @@ export default function Portfolio() {
   ];
 
   const projectsMap = dynamicProjects.length > 0 ? dynamicProjects.map((dp, index) => ({
-      title: dp.name,
-      category: dp.category || dp.industry || "Digital Product",
-      image: dp.coverImage || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+      title: displayText(dp.name, "Project"),
+      category: displayText(dp.category || dp.industry, "Digital Product"),
+      image: displayText(dp.coverImage, "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"),
       stats: { label: "Impact", value: "10x" },
       span: index % 4 === 0 || index % 4 === 3 ? "lg:col-span-8" : "lg:col-span-4",
       height: index < 2 ? "h-[500px]" : "h-[400px]",
-      projectUrl: dp.projectUrl || "",
+      projectUrl: displayText(dp.projectUrl, ""),
   })) : baseProjects.map(bp => ({ ...bp, projectUrl: "" }));
 
   return (

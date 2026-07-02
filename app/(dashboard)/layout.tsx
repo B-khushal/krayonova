@@ -29,7 +29,16 @@ export default async function DashboardLayout({ children }: { children: React.Re
       {/* Sidebar */}
       <aside className="w-64 fixed inset-y-0 left-0 bg-white/80 backdrop-blur-xl border-r border-gray-200/50 z-20 flex flex-col">
         <div className="h-20 flex items-center px-8 border-b border-gray-100">
-           <Link href="/" className="text-xl font-display font-bold text-text-main">KrayoNova <span className="text-primary">Client</span></Link>
+           <Link href="/" className="flex items-center gap-2.5">
+             <img
+               src="/brand-logo.svg"
+               alt="KrayoNova logo"
+               className="h-10 w-10 rounded-xl border border-black/5 object-cover shadow-sm"
+             />
+             <span className="text-xl font-display font-bold text-text-main">
+               KrayoNova <span className="text-primary">Client</span>
+             </span>
+           </Link>
         </div>
         <div className="flex-1 py-8 px-4 space-y-2 overflow-y-auto">
           {sidebarLinks.map((link) => {

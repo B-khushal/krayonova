@@ -2,6 +2,7 @@ import { getServerUser } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import { displayText } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const user = await getServerUser();
@@ -21,9 +22,9 @@ export default async function DashboardPage() {
     if (data) {
       projects = data.map(p => ({
         id: p.id,
-        name: p.title,
-        industry: p.industry,
-        status: p.status,
+        name: displayText(p.title, "Project"),
+        industry: displayText(p.industry, "Digital Development"),
+        status: displayText(p.status, "In Progress"),
         order: p.order,
       }));
     }
@@ -95,21 +96,21 @@ export default async function DashboardPage() {
               <div key={project.id} className="glass-card glass-border p-6 rounded-2xl bg-white/80 flex items-center justify-between">
                 <div className="flex gap-4 items-center">
                   <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-primary font-bold">
-                    {project.name[0]}
+                    {displayText(project.name, "P")[0]}
                   </div>
                   <div>
-                    <h4 className="font-medium text-text-main">{project.name}</h4>
-                    <p className="text-sm text-text-muted">{project.industry || "Digital Development"}</p>
+                    <h4 className="font-medium text-text-main">{displayText(project.name, "Project")}</h4>
+                    <p className="text-sm text-text-muted">{displayText(project.industry, "Digital Development")}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-2 ${
-                    project.status === "Published" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                    displayText(project.status, "In Progress") === "Published" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
                   }`}>
-                    {project.status || "In Progress"}
+                    {displayText(project.status, "In Progress")}
                   </span>
                   <p className="text-sm font-medium text-text-main">
-                    {project.status === "Published" ? "100%" : "65%"}
+                    {displayText(project.status, "In Progress") === "Published" ? "100%" : "65%"}
                   </p>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { logPageViewServer } from "@/lib/actions";
 
 export default function AnalyticsTracker() {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function AnalyticsTracker() {
       try {
         await logPageViewServer({
           path: pathname,
-          search: searchParams.toString(),
+          search: searchParams?.toString() || "",
           referrer: typeof document !== "undefined" ? document.referrer : "",
           userAgent: typeof navigator !== "undefined" ? navigator.userAgent : ""
         });

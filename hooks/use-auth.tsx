@@ -34,11 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session && session.user) {
-        try {
-          await syncSessionCookie(session.access_token);
-        } catch (error) {
-          console.error("Error syncing auth session cookie:", error);
-        }
+        await syncSessionCookie(session.access_token);
 
         try {
           const { data: profile } = await supabase

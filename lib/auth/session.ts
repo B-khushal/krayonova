@@ -17,16 +17,18 @@ export function buildSessionCookieOptions() {
 }
 
 export async function syncSessionCookie(token: string) {
-  const response = await fetch("/api/auth/session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token }),
-  });
+  try {
+    const response = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to sync auth session");
+    return response.ok;
+  } catch {
+    return false;
   }
 }
 

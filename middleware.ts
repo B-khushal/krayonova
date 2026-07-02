@@ -5,7 +5,15 @@ import { ADMIN_ROLES, SESSION_COOKIE_NAME } from "@/lib/auth/session";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
+function hasSupabaseConfig() {
+  return Boolean(supabaseUrl && supabaseAnonKey);
+}
+
 async function fetchSupabaseUser(token: string) {
+  if (!hasSupabaseConfig()) {
+    return null;
+  }
+
   const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
     headers: {
       apikey: supabaseAnonKey,
@@ -21,6 +29,10 @@ async function fetchSupabaseUser(token: string) {
 }
 
 async function fetchUserRole(userId: string, token: string) {
+  if (!hasSupabaseConfig()) {
+    return null;
+  }
+
   const response = await fetch(
     `${supabaseUrl}/rest/v1/users?select=role&id=eq.${encodeURIComponent(userId)}&limit=1`,
     {

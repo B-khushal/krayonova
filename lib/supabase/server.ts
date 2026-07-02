@@ -1,5 +1,6 @@
 import { createClient as createClientWithOptions } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { createFallbackSupabaseClient, hasSupabaseConfig } from "./fallback";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -7,6 +8,10 @@ export async function createClient() {
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
+  if (!hasSupabaseConfig()) {
+    return createFallbackSupabaseClient() as any;
+  }
 
   if (token) {
     return createClientWithOptions(supabaseUrl, supabaseAnonKey, {

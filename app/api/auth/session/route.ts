@@ -4,7 +4,15 @@ import { buildSessionCookieOptions, SESSION_COOKIE_NAME } from "@/lib/auth/sessi
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
+function hasSupabaseConfig() {
+  return Boolean(supabaseUrl && supabaseAnonKey);
+}
+
 async function verifySessionToken(token: string) {
+  if (!hasSupabaseConfig()) {
+    return null;
+  }
+
   const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
     headers: {
       apikey: supabaseAnonKey,

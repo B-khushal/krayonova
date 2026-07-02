@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -52,7 +53,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="glass-card glass-border p-10 rounded-3xl w-full">
       <div className="text-center mb-8">
-        <Link href="/" className="text-2xl font-display font-bold text-text-main inline-block mb-8">KrayoNova</Link>
+        <BrandLogo href="/" className="mb-8 justify-center" />
         <h1 className="text-3xl font-display font-medium text-text-main mb-2">New Password</h1>
         <p className="text-text-muted text-sm">Enter your new secure password below</p>
       </div>

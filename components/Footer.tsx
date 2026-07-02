@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Hexagon, Twitter, Linkedin, Github, Mail } from "lucide-react";
+import { Twitter, Linkedin, Github, Mail } from "lucide-react";
 import { useDocument } from "@/hooks/use-content";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function Footer() {
   const { data: footerData } = useDocument<any>("settings", "footer");
@@ -45,14 +46,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
           
           <div className="lg:col-span-2">
-            <Link href="#" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <Hexagon className="w-5 h-5 text-white fill-white/20" />
-              </div>
-              <span className="font-display font-bold text-xl tracking-tight text-text-main">
-                KrayoNova
-              </span>
-            </Link>
+            <BrandLogo href="/" className="mb-6" />
             <p className="text-text-muted max-w-sm mb-8 leading-relaxed">
               {description}
             </p>

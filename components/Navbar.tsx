@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import { Menu, X, ArrowRight, Hexagon } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDocument } from "@/hooks/use-content";
+import BrandLogo from "@/components/BrandLogo";
 
 
 export default function Navbar() {
@@ -41,14 +42,7 @@ export default function Navbar() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="flex items-center justify-between">
-          <Link href="#" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300">
-              <Hexagon className="w-5 h-5 text-white fill-white/20" />
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight text-text-main">
-              KrayoNova
-            </span>
-          </Link>
+          <BrandLogo href="/" className="gap-2" />
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">

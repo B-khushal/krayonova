@@ -9,6 +9,7 @@ import Badge from "@/components/admin/ui/Badge";
 import EmptyState from "@/components/admin/ui/EmptyState";
 import LoadingSkeleton from "@/components/admin/ui/LoadingSkeleton";
 import { useToast } from "@/components/admin/ui/Toast";
+import { displayText } from "@/lib/utils";
 
 export default function AdminPortfolio() {
   const { data: projects, loading, error } = useCollection<any>("projects", { orderBy: { field: "order" } });
@@ -67,12 +68,12 @@ export default function AdminPortfolio() {
             <tbody>
               {projects.map((project: any) => (
                 <tr key={project.id}>
-                  <td className="font-mono text-xs text-text-tertiary">{project.order || 0}</td>
-                  <td className="font-semibold text-text-primary">{project.name}</td>
-                  <td className="text-text-secondary">{project.clientName}</td>
+                  <td className="font-mono text-xs text-text-tertiary">{displayText(project.order, "0")}</td>
+                  <td className="font-semibold text-text-primary">{displayText(project.name, "Project")}</td>
+                  <td className="text-text-secondary">{displayText(project.clientName, "Unassigned")}</td>
                   <td>
-                    <Badge variant={project.status === "Published" ? "success" : "warning"} dot>
-                      {project.status || "Draft"}
+                    <Badge variant={displayText(project.status, "Draft") === "Published" ? "success" : "warning"} dot>
+                      {displayText(project.status, "Draft")}
                     </Badge>
                   </td>
                   <td className="text-right">

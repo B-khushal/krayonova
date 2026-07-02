@@ -6,6 +6,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { syncSessionCookie } from "@/lib/auth/session";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
@@ -51,7 +52,7 @@ export default function SignUpPage() {
   return (
     <div className="glass-card glass-border p-10 rounded-3xl w-full">
       <div className="text-center mb-8">
-        <Link href="/" className="text-2xl font-display font-bold text-text-main inline-block mb-8">KrayoNova</Link>
+        <BrandLogo href="/" className="mb-8 justify-center" />
         <h1 className="text-3xl font-display font-medium text-text-main mb-2">Create Account</h1>
         <p className="text-text-muted text-sm">Join to get started with your next project</p>
       </div>

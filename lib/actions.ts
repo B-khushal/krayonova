@@ -2,6 +2,7 @@
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { displayText } from "@/lib/utils";
 
 // Helper to verify user is authenticated for write operations
 async function checkAuth() {
@@ -84,26 +85,26 @@ function translateRowToClient(collectionName: string, row: any): any {
     case "projects":
       return {
         ...base,
-        name: row.title,
-        title: row.title,
-        slug: row.slug,
-        clientName: row.client,
-        client: row.client,
-        industry: row.industry,
-        category: row.category,
+        name: displayText(row.title, "Project"),
+        title: displayText(row.title, "Project"),
+        slug: displayText(row.slug, ""),
+        clientName: displayText(row.client, ""),
+        client: displayText(row.client, ""),
+        industry: displayText(row.industry, ""),
+        category: displayText(row.category, ""),
         challenge: row.challenge,
         solution: row.solution,
         results: row.results,
         isFeatured: row.featured,
         featured: row.featured,
-        coverImage: row.cover_image,
+        coverImage: displayText(row.cover_image, ""),
         galleryImages: row.gallery,
         gallery: row.gallery,
         videos: row.videos,
         seo: row.seo,
-        status: row.status,
+        status: displayText(row.status, "Draft"),
         order: row.order,
-        projectUrl: row.project_url,
+        projectUrl: displayText(row.project_url, ""),
         createdAt: row.created_at,
         updatedAt: row.updated_at
       };
@@ -387,7 +388,7 @@ export async function fetchCollectionServer(collectionName: string) {
     const { data, error } = await supabase.from(table).select("*");
     if (error) throw error;
 
-    const items = (data || []).map(row => translateRowToClient(collectionName, row));
+    const items = (data || []).map((row: any) => translateRowToClient(collectionName, row));
     return serializeData(items);
   } catch (error) {
     console.error(`Error fetching collection ${collectionName}:`, error);
