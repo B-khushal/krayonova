@@ -10,8 +10,6 @@ import { Save, ArrowLeft, FolderKanban } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/admin/ui/Toast";
 
-export const dynamic = "force-dynamic";
-
 export default function EditProject(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
   const router = useRouter();
@@ -189,9 +187,21 @@ export default function EditProject(props: { params: Promise<{ id: string }> }) 
             </label>
           </div>
           {coverImage && (
-            <div className="mt-3 w-48 h-28 relative rounded-xl overflow-hidden border border-border-soft">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coverImage} alt="Preview" className="w-full h-full object-cover" />
+            <div className="mt-4 rounded-xl overflow-hidden border border-border-soft bg-bg-surface max-w-md shadow-md">
+              <div className="bg-bg-tertiary px-3 py-2 border-b border-border-soft flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                </div>
+                <div className="text-[10px] font-mono text-text-tertiary bg-bg-primary px-2 py-0.5 rounded border border-border-soft flex-1 truncate">
+                  {projectUrl || "https://website-preview.com"}
+                </div>
+              </div>
+              <div className="aspect-[16/10] relative w-full overflow-hidden bg-bg-secondary">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={coverImage} alt="Website Preview" className="w-full h-full object-cover object-top" />
+              </div>
             </div>
           )}
         </div>
