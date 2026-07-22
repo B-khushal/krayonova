@@ -15,10 +15,10 @@ export default async function BlogPage() {
   const dbPosts = await fetchCollectionServer("posts");
 
   const fallbackPosts = [
-    { title: "The Future of AI Agents in Enterprise Software", category: "AI & ML", createdAt: { toDate: () => new Date("2026-10-12") }, slug: "future-of-ai-agents", description: "A deep dive into how modern enterprises are leveraging these technologies to stay ahead of the curve." },
-    { title: "Building Scalable Architecture for SaaS Products", category: "Engineering", createdAt: { toDate: () => new Date("2026-09-28") }, slug: "scalable-saas-architecture", description: "Learn key architectural choices to handle scaling requirements without sacrificing velocity." },
-    { title: "Glassmorphism: The Design Trend That Won't Go Away", category: "Design", createdAt: { toDate: () => new Date("2026-09-15") }, slug: "glassmorphism-design-trends", description: "Understanding how glassmorphic design enhances interface depth and premium branding." },
-    { title: "Optimizing React Applications for Peak Performance", category: "Web Development", createdAt: { toDate: () => new Date("2026-08-30") }, slug: "optimizing-react-apps", description: "A technical guide on component tuning, bundle splitting, and rendering optimization." },
+    { id: "1", title: "The Future of AI Agents in Enterprise Software", category: "AI & ML", createdAt: "2026-10-12T00:00:00.000Z", slug: "future-of-ai-agents", description: "A deep dive into how modern enterprises are leveraging these technologies to stay ahead of the curve." },
+    { id: "2", title: "Building Scalable Architecture for SaaS Products", category: "Engineering", createdAt: "2026-09-28T00:00:00.000Z", slug: "scalable-saas-architecture", description: "Learn key architectural choices to handle scaling requirements without sacrificing velocity." },
+    { id: "3", title: "Glassmorphism: The Design Trend That Won't Go Away", category: "Design", createdAt: "2026-09-15T00:00:00.000Z", slug: "glassmorphism-design-trends", description: "Understanding how glassmorphic design enhances interface depth and premium branding." },
+    { id: "4", title: "Optimizing React Applications for Peak Performance", category: "Web Development", createdAt: "2026-08-30T00:00:00.000Z", slug: "optimizing-react-apps", description: "A technical guide on component tuning, bundle splitting, and rendering optimization." },
   ];
 
   const posts = dbPosts && dbPosts.length > 0 ? dbPosts : fallbackPosts;

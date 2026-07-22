@@ -10,6 +10,8 @@ import { Save, ArrowLeft, FolderKanban } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/admin/ui/Toast";
 
+export const dynamic = "force-dynamic";
+
 export default function EditProject(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
   const router = useRouter();

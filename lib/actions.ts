@@ -409,25 +409,28 @@ function translateClientToRow(collectionName: string, data: any): any {
 // Serialize timestamp objects so they are serializable by Next.js Server Actions
 function serializeData(data: any): any {
   if (data === null || data === undefined) return data;
+  if (data instanceof Date) {
+    return data.toISOString();
+  }
   if (Array.isArray(data)) {
     return data.map(serializeData);
-  }
-  if (data instanceof Date) {
-    return { seconds: Math.floor(data.getTime() / 1000), nanoseconds: 0 };
   }
   if (typeof data === "object") {
     const result: any = {};
     for (const [key, val] of Object.entries(data)) {
+      if (typeof val === "function") {
+        continue;
+      }
       if (val instanceof Date) {
-        result[key] = { seconds: Math.floor(val.getTime() / 1000), nanoseconds: 0 };
-      } else if (typeof val === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(val)) {
-        const d = new Date(val);
-        result[key] = { seconds: Math.floor(d.getTime() / 1000), nanoseconds: 0 };
+        result[key] = val.toISOString();
       } else {
         result[key] = serializeData(val);
       }
     }
     return result;
+  }
+  if (typeof data === "function") {
+    return undefined;
   }
   return data;
 }
@@ -437,24 +440,33 @@ const memoryStore: Record<string, any[]> = {};
 export async function fetchCollectionServer(collectionName: string) {
   try {
     const table = mapCollectionToTable(collectionName);
-    const supabase = await createClient();
-    
-    let { data, error } = await supabase.from(table).select("*");
-    
-    if ((error || !data || data.length === 0) && supabaseAdmin && typeof supabaseAdmin.from === "function") {
+    let data: any = null;
+
+    if (supabaseAdmin && typeof supabaseAdmin.from === "function") {
       try {
         const adminRes = await supabaseAdmin.from(table).select("*");
         if (!adminRes.error && adminRes.data) {
           data = adminRes.data;
-          error = null;
         }
       } catch {
         // Ignore fallback error
       }
     }
 
+    if (!data && hasSupabaseConfig()) {
+      try {
+        const supabase = await createClient();
+        const res = await supabase.from(table).select("*");
+        if (!res.error && res.data) {
+          data = res.data;
+        }
+      } catch {
+        // Ignore dynamic server usage in static builds
+      }
+    }
+
     let dbItems: any[] = [];
-    if (!error && Array.isArray(data)) {
+    if (Array.isArray(data)) {
       dbItems = data.map((row: any) => translateRowToClient(collectionName, row));
     }
 
@@ -477,23 +489,32 @@ export async function fetchDocumentServer(collectionName: string, id: string) {
   try {
     if (!id) return null;
     const table = mapCollectionToTable(collectionName);
-    const supabase = await createClient();
-    
-    let { data, error } = await supabase.from(table).select("*").eq("id", id).maybeSingle();
-    
-    if ((error || !data) && supabaseAdmin && typeof supabaseAdmin.from === "function") {
+    let data: any = null;
+
+    if (supabaseAdmin && typeof supabaseAdmin.from === "function") {
       try {
         const adminRes = await supabaseAdmin.from(table).select("*").eq("id", id).maybeSingle();
         if (!adminRes.error && adminRes.data) {
           data = adminRes.data;
-          error = null;
         }
       } catch {
         // Ignore fallback error
       }
     }
 
-    if (!error && data) {
+    if (!data && hasSupabaseConfig()) {
+      try {
+        const supabase = await createClient();
+        const res = await supabase.from(table).select("*").eq("id", id).maybeSingle();
+        if (!res.error && res.data) {
+          data = res.data;
+        }
+      } catch {
+        // Ignore dynamic server usage
+      }
+    }
+
+    if (data) {
       const item = translateRowToClient(collectionName, data);
       return serializeData(item);
     }

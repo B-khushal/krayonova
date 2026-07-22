@@ -28,6 +28,21 @@ export default function BlogList({ posts }: { posts: Post[] }) {
     return matchesSearch && matchesCategory;
   });
 
+  const formatDate = (val: any) => {
+    if (!val) return "Recently";
+    try {
+      if (typeof val === "string" || typeof val === "number") {
+        return new Date(val).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+      if (typeof val === "object" && val.seconds) {
+        return new Date(val.seconds * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+    } catch {
+      return "Recently";
+    }
+    return "Recently";
+  };
+
   return (
     <>
       <div className="max-w-5xl mx-auto mb-12 flex flex-col md:flex-row gap-6 items-center justify-between">
@@ -64,9 +79,7 @@ export default function BlogList({ posts }: { posts: Post[] }) {
           <div className="col-span-2 text-center text-text-muted py-12">No posts match your search or filter.</div>
         ) : (
           filteredPosts.map((post, i) => {
-            const dateString = post.createdAt?.toDate 
-              ? post.createdAt.toDate().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) 
-              : "Recently";
+            const dateString = formatDate(post.createdAt);
 
             return (
               <Link 
