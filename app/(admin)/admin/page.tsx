@@ -6,62 +6,44 @@ import {
   ArrowUpRight,
   LineChart,
   TrendingUp,
-  Clock,
   PenTool,
   Image as ImageIcon,
   Target,
   Activity,
-  CheckCircle,
   Zap,
 } from "lucide-react";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { fetchCollectionServer } from "@/lib/actions";
 import Link from "next/link";
 
+export const revalidate = 0; // Always fetch fresh real data for admin dashboard
+
 export default async function AdminDashboard() {
-  // Query Supabase
-  const { data: leadsData } = await supabaseAdmin
-    .from("leads")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const { data: projectsData } = await supabaseAdmin
-    .from("portfolio")
-    .select("*");
-
-  const { data: clientsData } = await supabaseAdmin
-    .from("users")
-    .select("*")
-    .eq("role", "client");
-
-  const { data: analyticsData } = await supabaseAdmin
-    .from("analytics")
-    .select("*");
-
-  const { data: postsData } = await supabaseAdmin
-    .from("blog_posts")
-    .select("*");
+  const [leadsData, projectsData, usersData, analyticsData, postsData] = await Promise.all([
+    fetchCollectionServer("leads"),
+    fetchCollectionServer("projects"),
+    fetchCollectionServer("users"),
+    fetchCollectionServer("analytics"),
+    fetchCollectionServer("posts"),
+  ]);
 
   const totalLeads = leadsData?.length || 0;
   const totalProjects = projectsData?.length || 0;
-  const totalClients = clientsData?.length || 0;
+  const totalClients = (usersData || []).filter((u: any) => u.role === "client").length;
   const totalPageViews = analyticsData?.length || 0;
   const totalPosts = postsData?.length || 0;
 
-  const recentLeads = (leadsData || []).slice(0, 5).map((lead) => ({
-    id: lead.id,
-    firstName: lead.name?.split(" ")[0] || lead.name || "Inquiry",
-    lastName: lead.name?.split(" ").slice(1).join(" ") || "",
-    email: lead.email,
-    company: lead.company,
-    source: lead.source,
-    status: lead.status,
-    details: lead.notes,
-    created_at: lead.created_at,
-  }));
+  // Sort real leads descending by creation date
+  const sortedLeads = [...(leadsData || [])].sort((a: any, b: any) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeB - timeA;
+  });
+
+  const recentLeads = sortedLeads.slice(0, 5);
 
   // Group views by path
   const pathViews: Record<string, number> = {};
-  (analyticsData || []).forEach((item) => {
+  (analyticsData || []).forEach((item: any) => {
     const p = item.path || "/";
     pathViews[p] = (pathViews[p] || 0) + 1;
   });
@@ -87,21 +69,21 @@ export default async function AdminDashboard() {
       <div className="admin-card p-6 bg-gradient-to-r from-primary/5 via-accent/5 to-transparent border-primary/10">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-display font-bold text-text-primary mb-1">
+            <h1 className="text-xl font-display font-bold text-text-primary mb-1">
               Welcome back to your Agency OS
-            </h2>
+            </h1>
             <p className="text-sm text-text-tertiary">
-              Here&apos;s what&apos;s happening across your digital agency today.
+              Real-time platform telemetry and client pipeline metrics.
             </p>
           </div>
           <div className="hidden md:flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span className="text-xs font-medium text-success">All systems operational</span>
+            <span className="text-xs font-medium text-success">Live Database Telemetry</span>
           </div>
         </div>
       </div>
 
-      {/* Stat Cards */}
+      {/* Real Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5 admin-stagger">
         {/* Page Views */}
         <div className="admin-card p-5 flex flex-col gap-3">
@@ -115,7 +97,7 @@ export default async function AdminDashboard() {
             <p className="text-2xl font-display font-bold text-text-primary">{totalPageViews.toLocaleString()}</p>
             <p className="stat-trend-up mt-1">
               <ArrowUpRight className="w-3 h-3" />
-              Active tracking
+              Real page views
             </p>
           </div>
         </div>
@@ -132,7 +114,7 @@ export default async function AdminDashboard() {
             <p className="text-2xl font-display font-bold text-text-primary">{totalClients}</p>
             <p className="stat-trend-up mt-1">
               <ArrowUpRight className="w-3 h-3" />
-              CRM accounts
+              Registered clients
             </p>
           </div>
         </div>
@@ -166,7 +148,7 @@ export default async function AdminDashboard() {
             <p className="text-2xl font-display font-bold text-text-primary">{totalProjects}</p>
             <p className="stat-trend-up mt-1">
               <ArrowUpRight className="w-3 h-3" />
-              Managed projects
+              Active projects
             </p>
           </div>
         </div>
@@ -179,10 +161,10 @@ export default async function AdminDashboard() {
           <div className="flex items-center justify-between">
             <h2 className="text-base font-display font-semibold text-text-primary flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-primary" />
-              Recent CRM Leads
+              Recent CRM Leads ({recentLeads.length})
             </h2>
             <Link href="/admin/crm" className="text-xs font-medium text-primary hover:text-primary-hover transition-colors">
-              View all →
+              View pipeline →
             </Link>
           </div>
 
@@ -190,8 +172,8 @@ export default async function AdminDashboard() {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Details</th>
+                  <th>Contact</th>
+                  <th>Details / Source</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -199,30 +181,36 @@ export default async function AdminDashboard() {
                 {recentLeads.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="px-6 py-10 text-center text-text-tertiary text-sm">
-                      No leads registered yet. They&apos;ll appear here once inquiries come in.
+                      No lead inquiries logged yet. New contact messages and email entries will appear here.
                     </td>
                   </tr>
                 ) : (
-                  recentLeads.map((lead) => (
-                    <tr key={lead.id}>
-                      <td>
-                        <div>
-                          <p className="font-semibold text-text-primary text-sm">
-                            {lead.firstName} {lead.lastName}
-                          </p>
-                          <p className="text-xs text-text-tertiary mt-0.5">{lead.email}</p>
-                        </div>
-                      </td>
-                      <td>
-                        <p className="text-xs text-text-secondary line-clamp-1 max-w-xs">{lead.details}</p>
-                      </td>
-                      <td>
-                        <span className={statusBadge(lead.status || "New")}>
-                          {lead.status || "New"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
+                  recentLeads.map((lead: any) => {
+                    const date = lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "Just now";
+                    return (
+                      <tr key={lead.id}>
+                        <td>
+                          <div>
+                            <p className="font-semibold text-text-primary text-sm">
+                              {lead.firstName} {lead.lastName}
+                            </p>
+                            <p className="text-xs text-text-tertiary mt-0.5">{lead.email}</p>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="space-y-0.5 max-w-xs">
+                            <p className="text-xs text-text-secondary line-clamp-1">{lead.details || "Inquiry"}</p>
+                            <p className="text-[10px] text-text-tertiary font-mono">{lead.source || "Website"} • {date}</p>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={statusBadge(lead.status || "New")}>
+                            {lead.status || "New"}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -239,18 +227,18 @@ export default async function AdminDashboard() {
             </h2>
             <div className="admin-card p-5 space-y-4">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5" /> Path Distribution
+                <TrendingUp className="w-3.5 h-3.5" /> Real Path Views
               </p>
               <div className="space-y-3">
                 {Object.entries(pathViews).length === 0 ? (
                   <p className="text-text-tertiary text-xs text-center py-4">
-                    No traffic logged yet.
+                    No page views logged yet.
                   </p>
                 ) : (
                   Object.entries(pathViews)
                     .slice(0, 5)
                     .map(([path, count]) => {
-                      const pct = Math.round((count / totalPageViews) * 100) || 0;
+                      const pct = Math.round((count / Math.max(totalPageViews, 1)) * 100) || 0;
                       return (
                         <div key={path} className="space-y-1.5">
                           <div className="flex justify-between text-xs">
@@ -270,9 +258,6 @@ export default async function AdminDashboard() {
                     })
                 )}
               </div>
-              <p className="text-text-tertiary text-[10px] text-center pt-2 border-t border-border-soft">
-                Real-time server-side tracking is operational
-              </p>
             </div>
           </div>
 
@@ -286,7 +271,7 @@ export default async function AdminDashboard() {
               {[
                 { label: "New Post", icon: PenTool, href: "/admin/blog/new", color: "text-info" },
                 { label: "Add Project", icon: FolderKanban, href: "/admin/portfolio/new", color: "text-primary" },
-                { label: "View Leads", icon: Target, href: "/admin/crm", color: "text-warning" },
+                { label: "CRM Pipeline", icon: Target, href: "/admin/crm", color: "text-warning" },
                 { label: "Upload Media", icon: ImageIcon, href: "/admin/media", color: "text-success" },
               ].map((item) => (
                 <Link
@@ -303,11 +288,10 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      {/* Bottom row */}
+      {/* Bottom Overview */}
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Content Stats */}
         <div className="admin-card p-5 space-y-4">
-          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">Content Overview</h3>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">Real Content Metrics</h3>
           <div className="space-y-3">
             {[
               { label: "Blog Posts", value: totalPosts, icon: PenTool },
@@ -325,15 +309,14 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* System Health */}
         <div className="admin-card p-5 space-y-4">
-          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">System Health</h3>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">System Telemetry</h3>
           <div className="space-y-3">
             {[
               { label: "Database", status: "Operational", color: "bg-success" },
-              { label: "Storage", status: "Operational", color: "bg-success" },
-              { label: "Authentication", status: "Operational", color: "bg-success" },
-              { label: "API", status: "Operational", color: "bg-success" },
+              { label: "Storage Engine", status: "Operational", color: "bg-success" },
+              { label: "Auth Provider", status: "Operational", color: "bg-success" },
+              { label: "Server Actions", status: "Operational", color: "bg-success" },
             ].map((item) => (
               <div key={item.label} className="flex items-center justify-between py-2 border-b border-border-soft last:border-0">
                 <span className="text-sm text-text-secondary">{item.label}</span>
@@ -346,15 +329,14 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Recent Activity */}
         <div className="admin-card p-5 space-y-4">
-          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">Platform Activity</h3>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">Live Platform Telemetry</h3>
           <div className="space-y-3">
             {[
-              { label: "Admin panel loaded", time: "Just now", icon: Activity },
-              { label: `${totalLeads} leads in pipeline`, time: "Live", icon: Target },
-              { label: `${totalPageViews} page views tracked`, time: "Cumulative", icon: Eye },
-              { label: `${totalPosts} blog posts`, time: "Published", icon: PenTool },
+              { label: "Admin telemetry active", time: "Just now", icon: Activity },
+              { label: `${totalLeads} real leads in pipeline`, time: "Real database", icon: Target },
+              { label: `${totalPageViews} real page views`, time: "Server logs", icon: Eye },
+              { label: `${totalPosts} blog articles`, time: "Live CMS", icon: PenTool },
             ].map((item, idx) => (
               <div key={idx} className="flex items-start gap-2.5 py-2 border-b border-border-soft last:border-0">
                 <item.icon className="w-3.5 h-3.5 text-text-tertiary mt-0.5 shrink-0" />

@@ -9,7 +9,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <>
       <Background />
       <Navbar />
-      <main className="min-h-screen pt-20">
+      <main id="main-content" className="min-h-screen pt-20">
         {children}
       </main>
       <Footer />
@@ -19,4 +19,3 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
-

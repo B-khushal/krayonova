@@ -194,7 +194,7 @@ GEMINI_API_KEY=your_gemini_api_key
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) for the public site and [http://localhost:3000/admin](http://localhost:3000/admin) for the admin panel.
+Open [http://localhost:3002](http://localhost:3002) for the public site and [http://localhost:3002/admin](http://localhost:3002/admin) for the admin panel.
 
 ### Build for Production
 

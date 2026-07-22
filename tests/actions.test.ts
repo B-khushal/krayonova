@@ -2,10 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createDocServer, deleteDocServer, updateDocServer } from "@/lib/actions";
 
 const mockCreateClient = vi.hoisted(() => vi.fn());
+const mockGetServerUser = vi.hoisted(() => vi.fn().mockResolvedValue(null));
 const mockSupabaseAdminFrom = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/supabase/server", () => ({
   createClient: mockCreateClient,
+  getServerUser: mockGetServerUser,
 }));
 
 vi.mock("@/lib/supabase/admin", () => ({

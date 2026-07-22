@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { MessageSquare, ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { cms } from "@/lib/cms";
 
@@ -9,14 +9,32 @@ export default function CTA() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    await cms.create("leads", { email, status: "New", details: "Lead from CTA", firstName: "", lastName: "" });
-    setSuccess(true);
-    setLoading(false);
+    setError("");
+
+    try {
+      await cms.create("leads", {
+        name: email.split("@")[0],
+        firstName: email.split("@")[0],
+        lastName: "",
+        email: email.trim(),
+        status: "New",
+        source: "Website CTA Banner",
+        details: `Inquiry submitted via CTA email box (${email.trim()}).`,
+        createdAt: new Date(),
+      });
+      setSuccess(true);
+      setEmail("");
+    } catch {
+      setError("Failed to send inquiry. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +56,7 @@ export default function CTA() {
           }}
         ></div>
         
-        {/* Animated Orbs for Premium feel */}
+        {/* Animated Orbs */}
         <motion.div 
           className="absolute top-0 right-0 w-96 h-96 bg-white/20 rounded-full blur-[80px]"
           animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
@@ -59,7 +77,8 @@ export default function CTA() {
           </p>
           
           {success ? (
-            <div className="bg-white/20 backdrop-blur text-white px-8 py-4 rounded-2xl border border-white/50 text-lg font-medium">
+            <div className="bg-white/20 backdrop-blur text-white px-8 py-4 rounded-2xl border border-white/50 text-lg font-medium flex items-center gap-3 animate-fade-in">
+              <CheckCircle2 className="w-6 h-6 text-green-300" />
               Thank you! We&apos;ll be in touch soon.
             </div>
           ) : (
@@ -69,18 +88,22 @@ export default function CTA() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address" 
-                className="flex-1 rounded-full px-6 py-4 outline-none border-none text-gray-900 font-medium placeholder:text-gray-500 shadow-xl"
+                aria-label="Enter your email address"
+                className="flex-1 rounded-full px-6 py-4 outline-none border-none text-gray-900 font-medium placeholder:text-gray-500 shadow-xl bg-white focus:ring-2 focus:ring-primary/50"
                 required
               />
               <button 
                 type="submit" 
                 disabled={loading}
-                className="group relative px-8 py-4 bg-gray-900 text-white rounded-full font-semibold shadow-2xl hover:bg-black transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="group relative px-8 py-4 bg-gray-900 text-white rounded-full font-semibold shadow-2xl hover:bg-black transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shrink-0"
               >
                 {loading ? "Sending..." : "Start"}
                 {!loading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
               </button>
             </form>
+          )}
+          {error && (
+            <p className="text-red-200 text-xs mt-3 bg-red-900/40 px-4 py-1.5 rounded-full border border-red-400/30">{error}</p>
           )}
         </div>
       </motion.div>

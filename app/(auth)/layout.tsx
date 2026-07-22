@@ -1,4 +1,11 @@
 import Background from "@/components/Background";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata = generateSEO({
+  title: "Account Authentication",
+  description: "Secure client and admin portal authentication for KrayoNova platforms.",
+  noIndex: true,
+});
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

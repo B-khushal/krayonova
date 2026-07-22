@@ -169,8 +169,22 @@ export function useCollection<T>(collectionName: string, options?: {
         .subscribe();
     }
 
+    const handleCmsUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      if (!customEvent.detail || customEvent.detail.collectionName === collectionName) {
+        loadData();
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("cms:updated", handleCmsUpdate);
+    }
+
     return () => {
       active = false;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("cms:updated", handleCmsUpdate);
+      }
       if (channel) {
         supabase.removeChannel(channel);
       }

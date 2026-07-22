@@ -1,49 +1,55 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import CTA from "@/components/CTA";
 import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-
   const params = await props.params;
   const slug = params.slug;
 
   let postData = null;
-  const { data: posts } = await supabaseAdmin
-    .from("blog_posts")
-    .select("*")
-    .eq("slug", slug);
-
-  if (posts && posts.length > 0) {
-    postData = posts[0];
-  } else {
-    const { data: post } = await supabaseAdmin
+  if (supabaseAdmin && typeof supabaseAdmin.from === "function") {
+    const { data: posts } = await supabaseAdmin
       .from("blog_posts")
       .select("*")
-      .eq("id", slug)
-      .maybeSingle();
-    if (post) {
-      postData = post;
+      .eq("slug", slug);
+
+    if (posts && posts.length > 0) {
+      postData = posts[0];
+    } else {
+      const { data: post } = await supabaseAdmin
+        .from("blog_posts")
+        .select("*")
+        .eq("id", slug)
+        .maybeSingle();
+      if (post) {
+        postData = post;
+      }
     }
   }
 
   if (!postData) {
-    return { title: "Post Not Found | KrayoNova" };
+    return generateSEO({
+      title: "Article | KrayoNova Blog",
+      path: `/blog/${slug}`,
+    });
   }
 
-  return {
-    title: `${postData.meta_title || postData.title} | KrayoNova Blog`,
-    description: postData.meta_description || "Insight article by KrayoNova.",
-    openGraph: {
-      title: postData.title,
-      description: postData.meta_description || "Insight article by KrayoNova.",
-      images: postData.cover_image ? [postData.cover_image] : [],
-    }
-  };
+  return generateSEO({
+    title: postData.meta_title || postData.title,
+    description: postData.meta_description || postData.description || "Insight article by KrayoNova.",
+    path: `/blog/${slug}`,
+    image: postData.cover_image || "/og-image.png",
+    type: "article",
+    publishedTime: postData.created_at,
+    authors: [postData.author || "KrayoNova Team"],
+  });
 }
 
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
@@ -51,21 +57,23 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
   const slug = params.slug;
 
   let rawPost = null;
-  const { data: posts } = await supabaseAdmin
-    .from("blog_posts")
-    .select("*")
-    .eq("slug", slug);
-
-  if (posts && posts.length > 0) {
-    rawPost = posts[0];
-  } else {
-    const { data: post } = await supabaseAdmin
+  if (supabaseAdmin && typeof supabaseAdmin.from === "function") {
+    const { data: posts } = await supabaseAdmin
       .from("blog_posts")
       .select("*")
-      .eq("id", slug)
-      .maybeSingle();
-    if (post) {
-      rawPost = post;
+      .eq("slug", slug);
+
+    if (posts && posts.length > 0) {
+      rawPost = posts[0];
+    } else {
+      const { data: post } = await supabaseAdmin
+        .from("blog_posts")
+        .select("*")
+        .eq("id", slug)
+        .maybeSingle();
+      if (post) {
+        rawPost = post;
+      }
     }
   }
 
@@ -114,11 +122,12 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
 
           {postData.coverImage && (
             <div className="w-full h-[400px] relative rounded-3xl overflow-hidden glass-card glass-border mb-12">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
+              <Image 
                 src={postData.coverImage} 
                 alt={postData.title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 896px) 100vw, 896px"
+                className="object-cover"
               />
             </div>
           )}
