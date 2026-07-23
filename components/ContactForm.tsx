@@ -49,9 +49,9 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="glass-card glass-border p-10 rounded-3xl bg-white/80">
+    <div className="glass-card glass-border p-6 sm:p-10 rounded-2xl sm:rounded-3xl bg-white/80">
       {success ? (
-        <div className="text-center py-12 space-y-4">
+        <div className="text-center py-8 sm:py-12 space-y-4">
           <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-scale-in">
             <CheckCircle2 className="w-8 h-8" />
           </div>
@@ -65,13 +65,13 @@ export default function ContactForm() {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {error && (
             <div className="p-3 bg-red-900/10 border border-red-500/20 text-red-500 rounded-xl text-sm text-center">
               {error}
             </div>
           )}
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label htmlFor="first-name-input" className="block text-sm font-medium text-text-main mb-2">First Name</label>
               <input 

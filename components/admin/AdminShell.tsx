@@ -76,6 +76,7 @@ type AdminShellProps = {
 
 export default function AdminShell({ children, userName, userRole }: AdminShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [quickCreateOpen, setQuickCreateOpen] = useState(false);
 
@@ -93,15 +94,26 @@ export default function AdminShell({ children, userName, userRole }: AdminShellP
 
   const handleSearchOpen = useCallback(() => setSearchOpen(true), []);
   const handleQuickCreate = useCallback(() => setQuickCreateOpen(true), []);
+  const handleMobileMenuToggle = useCallback(() => setMobileMenuOpen((prev) => !prev), []);
 
-  const sidebarWidth = sidebarCollapsed ? "w-[68px]" : "w-[260px]";
-  const mainMargin = sidebarCollapsed ? "ml-[68px]" : "ml-[260px]";
+  const sidebarWidth = sidebarCollapsed ? "md:w-[68px]" : "md:w-[260px]";
+  const mainMargin = sidebarCollapsed ? "md:ml-[68px]" : "md:ml-[260px]";
 
   return (
     <div className="flex min-h-screen bg-bg-primary">
+      {/* Mobile Drawer Overlay Backdrop */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* ── Sidebar ── */}
       <aside
-        className={`${sidebarWidth} fixed inset-y-0 left-0 bg-white border-r border-border-soft z-40 flex flex-col transition-all duration-300 ease-out`}
+        className={`w-[260px] ${sidebarWidth} fixed inset-y-0 left-0 bg-white border-r border-border-soft z-50 flex flex-col transition-transform duration-300 ease-out ${
+          mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Logo */}
         <div className={`h-16 flex items-center border-b border-border-soft shrink-0 ${sidebarCollapsed ? "justify-center px-2" : "px-5"}`}>
@@ -257,7 +269,7 @@ export default function AdminShell({ children, userName, userRole }: AdminShellP
           {/* Collapse toggle */}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="admin-sidebar-item w-full"
+            className="admin-sidebar-item w-full hidden md:flex"
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {sidebarCollapsed ? (
@@ -280,15 +292,16 @@ export default function AdminShell({ children, userName, userRole }: AdminShellP
       </aside>
 
       {/* ── Main Content Area ── */}
-      <div className={`${mainMargin} flex-1 flex flex-col min-h-screen transition-all duration-300 ease-out`}>
+      <div className={`ml-0 ${mainMargin} flex-1 flex flex-col min-h-screen transition-all duration-300 ease-out min-w-0`}>
         <AdminHeader
           userName={userName}
           userRole={userRole}
           onSearchOpen={handleSearchOpen}
           onQuickCreate={handleQuickCreate}
+          onMobileMenuToggle={handleMobileMenuToggle}
         />
 
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-x-hidden">
           <div className="max-w-[1400px] mx-auto admin-page">
             <ToastProvider>
               {children}

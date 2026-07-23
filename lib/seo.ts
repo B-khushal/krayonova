@@ -96,7 +96,7 @@ export function generateOrganizationSchema() {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+1-800-555-0199",
+      telephone: "+91-9959109048",
       contactType: "customer service",
       availableLanguage: ["English"],
     },

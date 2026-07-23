@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Bell, Plus } from "lucide-react";
+import { Search, Bell, Plus, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 type AdminHeaderProps = {
@@ -8,6 +8,7 @@ type AdminHeaderProps = {
   userRole?: string;
   onSearchOpen?: () => void;
   onQuickCreate?: () => void;
+  onMobileMenuToggle?: () => void;
 };
 
 const routeTitles: Record<string, string> = {
@@ -50,6 +51,7 @@ export default function AdminHeader({
   userRole = "Super Admin",
   onSearchOpen,
   onQuickCreate,
+  onMobileMenuToggle,
 }: AdminHeaderProps) {
   const pathname = usePathname() || "/admin";
 
@@ -72,28 +74,37 @@ export default function AdminHeader({
     .slice(0, 2);
 
   return (
-    <header className="h-16 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md border-b border-border-soft sticky top-0 z-30">
-      {/* Left: Breadcrumbs + Title */}
-      <div className="flex flex-col justify-center">
-        <div className="flex items-center gap-1.5 text-[11px] text-text-tertiary">
-          {breadcrumbs.map((crumb, index) => (
-            <span key={crumb.href} className="flex items-center gap-1.5">
-              {index > 0 && <span className="text-border-medium">/</span>}
-              <span className={index === breadcrumbs.length - 1 ? "text-text-secondary font-medium" : ""}>
-                {crumb.label}
+    <header className="h-16 flex items-center justify-between px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-border-soft sticky top-0 z-30">
+      {/* Left: Mobile Toggle + Breadcrumbs + Title */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMobileMenuToggle}
+          className="md:hidden p-2 text-text-secondary hover:text-text-primary rounded-lg border border-border-soft hover:bg-bg-secondary transition-colors"
+          title="Open Menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div className="flex flex-col justify-center">
+          <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-text-tertiary">
+            {breadcrumbs.map((crumb, index) => (
+              <span key={crumb.href} className="flex items-center gap-1.5">
+                {index > 0 && <span className="text-border-medium">/</span>}
+                <span className={index === breadcrumbs.length - 1 ? "text-text-secondary font-medium" : ""}>
+                  {crumb.label}
+                </span>
               </span>
-            </span>
-          ))}
+            ))}
+          </div>
+          <h1 className="text-base sm:text-lg font-display font-semibold text-text-primary -mt-0.5">{pageTitle}</h1>
         </div>
-        <h1 className="text-lg font-display font-semibold text-text-primary -mt-0.5">{pageTitle}</h1>
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         {/* Search Trigger */}
         <button
           onClick={onSearchOpen}
-          className="admin-btn-ghost gap-3 text-xs text-text-tertiary hover:text-text-primary rounded-xl border border-border-soft px-3 py-1.5"
+          className="admin-btn-ghost gap-2 sm:gap-3 text-xs text-text-tertiary hover:text-text-primary rounded-xl border border-border-soft px-2.5 sm:px-3 py-1.5"
           title="Search (⌘K)"
         >
           <Search className="w-3.5 h-3.5" />
@@ -106,7 +117,7 @@ export default function AdminHeader({
         {/* Quick Create */}
         <button
           onClick={onQuickCreate}
-          className="admin-btn-primary py-1.5 px-3 text-xs"
+          className="admin-btn-primary py-1.5 px-2.5 sm:px-3 text-xs"
           title="Quick Create"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -120,7 +131,7 @@ export default function AdminHeader({
         </button>
 
         {/* Divider */}
-        <div className="w-px h-8 bg-border-soft mx-1"></div>
+        <div className="w-px h-8 bg-border-soft mx-0.5 sm:mx-1"></div>
 
         {/* User Avatar */}
         <div className="flex items-center gap-2.5 pl-1">

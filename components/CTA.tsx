@@ -40,7 +40,7 @@ export default function CTA() {
   return (
     <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <motion.div 
-        className="relative rounded-[3rem] overflow-hidden"
+        className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden transform-gpu"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -49,7 +49,7 @@ export default function CTA() {
         {/* Dynamic Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent"></div>
         <div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-20 pointer-events-none"
           style={{ 
             backgroundImage: "radial-gradient(circle at center, #ffffff 1px, transparent 1px)", 
             backgroundSize: "24px 24px" 
@@ -58,18 +58,18 @@ export default function CTA() {
         
         {/* Animated Orbs */}
         <motion.div 
-          className="absolute top-0 right-0 w-96 h-96 bg-white/20 rounded-full blur-[80px]"
+          className="absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-white/20 rounded-full blur-[50px] sm:blur-[80px] transform-gpu will-change-transform pointer-events-none"
           animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full blur-[80px]"
-          animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
+        <motion.div 
+          className="absolute bottom-0 left-0 w-64 sm:w-96 h-64 sm:h-96 bg-black/10 rounded-full blur-[50px] sm:blur-[80px] transform-gpu will-change-transform pointer-events-none"
+          animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-        <div className="relative z-10 px-8 py-20 md:py-32 flex flex-col items-center text-center">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 max-w-3xl tracking-tight leading-tight">
+        <div className="relative z-10 px-5 sm:px-8 py-14 sm:py-24 md:py-32 flex flex-col items-center text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold text-white mb-4 sm:mb-6 max-w-3xl tracking-tight leading-tight">
             Ready to Build Something Extraordinary?
           </h2>
           <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl font-light">

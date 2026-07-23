@@ -83,7 +83,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  output: 'standalone',
+  // output: 'standalone',
   transpilePackages: ['motion'],
   webpack: (config, { dev }) => {
     if (dev && process.env.DISABLE_HMR === 'true') {

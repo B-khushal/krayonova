@@ -68,7 +68,32 @@
   .text-balance {
     text-wrap: balance;
   }
+  .transform-gpu {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  .will-change-transform {
+    will-change: transform, opacity;
+  }
+  .contain-paint {
+    contain: paint layout;
+  }
 }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
 
 /* ════════════════════════════════════════
    PREMIUM ADMIN DESIGN SYSTEM

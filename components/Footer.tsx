@@ -14,7 +14,7 @@ export default function Footer() {
     { Icon: Twitter, url: footerData?.twitterUrl || "#" },
     { Icon: Linkedin, url: footerData?.linkedinUrl || "#" },
     { Icon: Github, url: footerData?.githubUrl || "#" },
-    { Icon: Mail, url: footerData?.mailUrl || "mailto:hello@krayonova.com" }
+    { Icon: Mail, url: footerData?.mailUrl || "mailto:krayonova@gmail.com" }
   ];
 
   const companyLinks = footerData?.companyLinks || [

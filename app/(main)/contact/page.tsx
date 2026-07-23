@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import { generateSEO } from "@/lib/seo";
 
@@ -32,21 +32,14 @@ export default function ContactPage() {
                 <div className="p-3 bg-white shadow-sm rounded-xl text-primary"><Mail className="w-6 h-6"/></div>
                 <div>
                   <p className="text-text-main font-medium">Email Us</p>
-                  <a href="mailto:hello@krayonova.com" className="text-text-muted hover:text-primary transition-colors">hello@krayonova.com</a>
+                  <a href="mailto:krayonova@gmail.com" className="text-text-muted hover:text-primary transition-colors">krayonova@gmail.com</a>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-white shadow-sm rounded-xl text-primary"><Phone className="w-6 h-6"/></div>
                 <div>
                   <p className="text-text-main font-medium">Call Us</p>
-                  <a href="tel:+15550000000" className="text-text-muted hover:text-primary transition-colors">+1 (555) 000-0000</a>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-white shadow-sm rounded-xl text-primary"><MapPin className="w-6 h-6"/></div>
-                <div>
-                  <p className="text-text-main font-medium">Headquarters</p>
-                  <p className="text-text-muted">123 Innovation Drive<br/>San Francisco, CA 94105</p>
+                  <a href="tel:9959109048" className="text-text-muted hover:text-primary transition-colors">+91 9959109048</a>
                 </div>
               </div>
             </div>

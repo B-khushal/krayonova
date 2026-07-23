@@ -24,7 +24,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative pt-28 pb-12 sm:pt-36 sm:pb-20 lg:pt-48 lg:pb-32 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
         
         {/* Left Content */}
@@ -34,60 +34,60 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel mb-8 border-primary/20 bg-white/40">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Enterprise Digital Agency</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full glass-panel mb-6 sm:mb-8 border-primary/20 bg-white/40">
+            <Sparkles className="w-4 h-4 text-primary shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-primary">Enterprise Digital Agency</span>
           </div>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-text-main leading-[1.1] tracking-tight mb-6 text-balance">
+          <h1 className="text-3.5xl sm:text-5xl lg:text-7xl font-display font-bold text-text-main leading-[1.12] sm:leading-[1.1] tracking-tight mb-6 text-balance">
             {formatHeading(heading)}
           </h1>
           
-          <p className="text-lg sm:text-xl text-text-muted mb-10 leading-relaxed max-w-xl">
+          <p className="text-base sm:text-xl text-text-muted mb-8 sm:mb-10 leading-relaxed max-w-xl">
             {subheading}
           </p>
 
           
-          <div className="flex flex-wrap items-center gap-4 mb-14">
-            <button className="group relative px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-medium shadow-[0_8px_25px_rgba(109,40,217,0.3)] hover:shadow-[0_12px_30px_rgba(109,40,217,0.4)] hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-              <span className="relative z-10 flex items-center gap-2 text-lg">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-10 sm:mb-14">
+            <button className="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-medium shadow-[0_8px_25px_rgba(109,40,217,0.3)] hover:shadow-[0_12px_30px_rgba(109,40,217,0.4)] hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer">
+              <span className="relative z-10 flex items-center gap-2 text-base sm:text-lg">
                 Start Your Project
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
             </button>
-            <button className="flex items-center gap-3 px-8 py-4 rounded-full font-medium text-text-main hover:bg-black/5 transition-colors border border-black/10 hover:border-black/20">
-              <Play className="w-5 h-5 text-primary" />
+            <button className="flex items-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-medium text-text-main hover:bg-black/5 transition-colors border border-black/10 hover:border-black/20 text-sm sm:text-base cursor-pointer">
+              <Play className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               View Showreel
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-6 pt-8 border-t border-black/5">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6 pt-6 sm:pt-8 border-t border-black/5">
             <div>
-              <div className="text-3xl font-display font-bold text-text-main mb-1">100+</div>
-              <div className="text-xs font-medium text-text-muted uppercase tracking-wider">Projects Shipped</div>
+              <div className="text-2xl sm:text-3xl font-display font-bold text-text-main mb-0.5 sm:mb-1">100+</div>
+              <div className="text-[10px] sm:text-xs font-medium text-text-muted uppercase tracking-wider">Projects Shipped</div>
             </div>
             <div>
-              <div className="text-3xl font-display font-bold text-text-main mb-1">50+</div>
-              <div className="text-xs font-medium text-text-muted uppercase tracking-wider">Enterprise Clients</div>
+              <div className="text-2xl sm:text-3xl font-display font-bold text-text-main mb-0.5 sm:mb-1">50+</div>
+              <div className="text-[10px] sm:text-xs font-medium text-text-muted uppercase tracking-wider">Enterprise Clients</div>
             </div>
             <div>
-              <div className="text-3xl font-display font-bold text-text-main mb-1">99%</div>
-              <div className="text-xs font-medium text-text-muted uppercase tracking-wider">Satisfaction Rate</div>
+              <div className="text-2xl sm:text-3xl font-display font-bold text-text-main mb-0.5 sm:mb-1">99%</div>
+              <div className="text-[10px] sm:text-xs font-medium text-text-muted uppercase tracking-wider">Satisfaction Rate</div>
             </div>
           </div>
         </motion.div>
 
         {/* Right Content - 3D Composition Simulation */}
         <motion.div 
-          className="relative h-[600px] w-full hidden lg:block"
+          className="relative h-[600px] w-full hidden lg:block transform-gpu"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
         >
           {/* Main Dashboard Panel */}
           <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[340px] glass-panel rounded-3xl p-6 z-20 flex flex-col gap-4 shadow-2xl"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[340px] glass-panel rounded-3xl p-6 z-20 flex flex-col gap-4 shadow-2xl transform-gpu will-change-transform"
             animate={{ y: ["-50%", "-52%", "-50%"] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -113,7 +113,7 @@ export default function Hero() {
                 {[40, 70, 45, 90, 65, 80, 100, 75].map((height, i) => (
                   <motion.div 
                     key={i}
-                    className="flex-1 bg-gradient-to-t from-primary/80 to-accent/80 rounded-t-sm"
+                    className="flex-1 bg-gradient-to-t from-primary/80 to-accent/80 rounded-t-sm transform-gpu"
                     initial={{ height: 0 }}
                     animate={{ height: `${height}%` }}
                     transition={{ duration: 1, delay: 0.5 + (i * 0.1) }}
@@ -124,7 +124,7 @@ export default function Hero() {
 
           {/* Floating Element 1 - Top Right */}
           <motion.div 
-            className="absolute top-10 right-0 w-64 glass-panel rounded-2xl p-5 z-30 flex items-center gap-4"
+            className="absolute top-10 right-0 w-64 glass-panel rounded-2xl p-5 z-30 flex items-center gap-4 transform-gpu will-change-transform"
             animate={{ y: [0, -15, 0], rotate: [0, 2, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -139,7 +139,7 @@ export default function Hero() {
 
           {/* Floating Element 2 - Bottom Left */}
           <motion.div 
-            className="absolute bottom-10 left-0 glass-panel rounded-full px-6 py-4 z-30 flex items-center gap-3 backdrop-blur-xl bg-white/70 shadow-xl border-white"
+            className="absolute bottom-10 left-0 glass-panel rounded-full px-6 py-4 z-30 flex items-center gap-3 backdrop-blur-xl bg-white/70 shadow-xl border-white transform-gpu will-change-transform"
             animate={{ y: [0, 15, 0], x: [0, -10, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -149,12 +149,12 @@ export default function Hero() {
 
           {/* Floating Element 3 - Background Tech Layers */}
           <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[400px] rounded-3xl border border-primary/10 bg-white/10 backdrop-blur-sm z-10 rotate-[-4deg]"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[400px] rounded-3xl border border-primary/10 bg-white/10 backdrop-blur-sm z-10 rotate-[-4deg] transform-gpu will-change-transform"
             animate={{ rotate: [-4, -2, -4] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[450px] rounded-3xl border border-secondary/5 bg-transparent z-0 rotate-[3deg]"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[450px] rounded-3xl border border-secondary/5 bg-transparent z-0 rotate-[3deg] transform-gpu will-change-transform"
             animate={{ rotate: [3, 5, 3] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           />

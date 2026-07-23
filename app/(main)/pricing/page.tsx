@@ -43,12 +43,12 @@ export default async function PricingPage() {
 
   return (
     <>
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-display font-medium text-text-main mb-6">
+      <section className="pt-28 pb-16 sm:py-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="text-center mb-12 sm:mb-16">
+          <h1 className="text-3.5xl sm:text-5xl font-display font-medium text-text-main mb-4 sm:mb-6">
             Transparent <span className="text-primary">Pricing</span>
           </h1>
-          <p className="text-xl text-text-muted max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-base sm:text-xl text-text-muted max-w-2xl mx-auto font-light leading-relaxed">
             Premium engineering services tailored to your growth stage.
           </p>
         </div>
@@ -57,9 +57,9 @@ export default async function PricingPage() {
           {plans.map((plan: any, i: number) => (
             <div
               key={i}
-              className={`p-8 rounded-3xl glass-card flex flex-col justify-between ${
+              className={`p-6 sm:p-8 rounded-3xl glass-card flex flex-col justify-between ${
                 plan.highlight
-                  ? "ring-2 ring-primary relative scale-105 shadow-2xl bg-white/90"
+                  ? "ring-2 ring-primary relative md:scale-105 shadow-2xl bg-white/90"
                   : "glass-border bg-white/80"
               }`}
             >

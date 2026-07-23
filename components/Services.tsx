@@ -78,18 +78,18 @@ export default function ServicesConfig() {
       {loading ? (
         <div className="flex justify-center p-12">Loading...</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-[300px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-[minmax(280px,auto)] md:auto-rows-[300px]">
           {servicesMap.map((service, index) => (
             <motion.div
               key={index}
-              className={`nova-card p-8 flex flex-col justify-between group relative overflow-hidden ${service.span}`}
+              className={`nova-card p-6 sm:p-8 flex flex-col justify-between group relative overflow-hidden transform-gpu ${service.span}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               {/* Background Glow on Hover */}
-              <div className="absolute -right-20 -top-20 w-48 h-48 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-colors duration-500 z-0"></div>
+              <div className="absolute -right-20 -top-20 w-48 h-48 bg-primary/5 rounded-full blur-[30px] group-hover:bg-primary/10 transition-colors duration-500 z-0 transform-gpu pointer-events-none"></div>
 
               <div className="relative z-10 flex justify-between items-start">
                 <div className="w-14 h-14 rounded-2xl bg-bg-gray border border-white flex items-center justify-center shadow-inner mb-6 group-hover:scale-110 transition-transform duration-300">

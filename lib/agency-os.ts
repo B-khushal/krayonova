@@ -400,7 +400,7 @@ export function createDefaultWebsiteControlConfig(): WebsiteControlConfig {
       agencyName: "KrayoNova",
       adminSuiteName: "Digital Agency OS",
       tagline: "Luxury operating system for growth, delivery, and website control.",
-      supportEmail: "hello@krayonova.com",
+      supportEmail: "krayonova@gmail.com",
       accentLabel: "Enterprise Edition",
     },
     visibility: {
@@ -453,7 +453,7 @@ export function createDefaultWebsiteControlConfig(): WebsiteControlConfig {
         twitter: "#",
         linkedin: "#",
         github: "#",
-        mail: "mailto:hello@krayonova.com",
+        mail: "mailto:krayonova@gmail.com",
       },
     },
     announcementBar: {
